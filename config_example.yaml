@@ -1,0 +1,42 @@
+targetDatabase:
+  credentials:
+    user: root
+    password: root
+    database: test
+    host: localhost
+    port: 5432
+  schema: public
+
+sourceDatabase:
+  credentials:
+    user: root
+    password: root
+    database: testsource
+    host: localhost
+    port: 5432
+  schema: public
+
+tables:
+  - name: TextTemplates
+    columns:
+      - Id
+      - LanguageId
+      - Text
+      - TextHeader
+      - Format
+    primaryKeys:
+      - Id
+      - LanguageId
+    onlyWhere:
+      - name: LanguageId
+        value: ''
+        type: string
+  - name: LanguageItems
+    columns:
+      - LanguageId
+      - LanguageKey
+      - LanguageValue
+      - LanguageItemType
+    primaryKeys:
+      - LanguageId
+      - LanguageKey
