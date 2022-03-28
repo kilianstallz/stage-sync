@@ -14,7 +14,6 @@ func BuildConnectionString(credentials config.ConfigDB) string {
 	if credentials.Password != "" {
 		userPart = fmt.Sprintf("%s:%s", userPart, credentials.Password)
 	}
-	fmt.Println(userPart)
 	if userPart != "" {
 		userPart = fmt.Sprintf("%s@", userPart)
 	}

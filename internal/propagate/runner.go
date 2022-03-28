@@ -2,6 +2,7 @@ package propagate
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq"
 	"go.uber.org/zap"
@@ -16,15 +17,13 @@ func Run(configPath string, isDryRun bool) {
 	zap.L().Info("Starting propagation")
 	conf, _ := config.ParseConfigFromFile(configPath)
 
-	zap.L().Info("Connecting to source database...")
-
 	// Get the source database connection string.
 	sourceDbConnectionString := builder.BuildConnectionString(conf.SourceDatabase.Credentials)
 
 	// Get the source database connection.
 	sourceDB, err := database.NewPostgresClient(sourceDbConnectionString)
 	if err != nil {
-		panic(err)
+		zap.S().Fatal("Failed to connect to source database", zap.Error(err))
 	}
 
 	tables := database.QueryTables(conf, sourceDB)
@@ -36,10 +35,18 @@ func Run(configPath string, isDryRun bool) {
 
 	// Get the target database connection.
 	targetDB, err := database.NewPostgresClient(targetDbConnectionString)
+	if err != nil {
+		zap.S().Fatal("Failed to connect to target database", zap.Error(err))
+	}
 
 	targetTables := database.QueryTables(conf, targetDB)
 
-	defer targetDB.Close()
+	defer func(targetDB *sql.DB) {
+		err := targetDB.Close()
+		if err != nil {
+			zap.S().Error("Failed to close target database connection", zap.Error(err))
+		}
+	}(targetDB)
 
 	ctx := context.Background()
 
@@ -57,27 +64,22 @@ func Run(configPath string, isDryRun bool) {
 
 		diffResult := diff.FindDiffResult(ftable, targetTable)
 
-		zap.L().Debug(fmt.Sprintf("%d added rows", len(diffResult.AddedRows)))
-		zap.L().Debug(fmt.Sprintf("%d deleted rows", len(diffResult.DeletedRows)))
-		zap.L().Debug(fmt.Sprintf("%d updated rows", len(diffResult.UpdatedRows.ChangedColumns)))
-
-		if isDryRun {
-			zap.L().Debug("Dry run, skipping database update")
-		}
+		zap.L().Info(fmt.Sprintf("%d added rows", len(diffResult.AddedRows)))
+		zap.L().Info(fmt.Sprintf("%d deleted rows", len(diffResult.DeletedRows)))
+		zap.L().Info(fmt.Sprintf("%d updated rows", len(diffResult.UpdatedRows.ChangedColumns)))
 
 		if len(diffResult.AddedRows) == 0 && len(diffResult.DeletedRows) == 0 && len(diffResult.UpdatedRows.ChangedColumns) == 0 {
-			zap.L().Debug(fmt.Sprintf("No changes on Table: %s", ftable.Name))
+			zap.L().Info(fmt.Sprintf("No changes on Table: %s", ftable.Name))
 			continue
 		}
 
 		if len(diffResult.AddedRows) > 0 {
-			zap.L().Debug(fmt.Sprintf("Adding rows on Table: %s", ftable.Name))
 			err := database.InsertRows(ctx, tx, targetTable.Name, diffResult.AddedRows, isDryRun)
 			if err != nil {
 				zap.L().Error("Error inserting rows ", zap.Error(err))
 				return
 			}
-			zap.L().Debug(fmt.Sprintf("Insert done on Table: %s", ftable.Name))
+			zap.L().Info(fmt.Sprintf("Insert done on Table: %s", ftable.Name))
 
 		}
 
@@ -89,17 +91,17 @@ func Run(configPath string, isDryRun bool) {
 				return
 			}
 
-			zap.L().Debug(fmt.Sprintf("Delete done on Table: %s", ftable.Name))
+			zap.L().Info(fmt.Sprintf("Delete done on Table: %s", ftable.Name))
 		}
 
 		if len(diffResult.UpdatedRows.ChangedColumns) > 0 {
 			// update the updated rows
 			err = database.UpdateRows(ctx, tx, targetTable.Name, diffResult.UpdatedRows.ChangedColumns, diffResult.UpdatedRows.Before, diffResult.UpdatedRows.After, isDryRun)
 			if err != nil {
-				zap.L().Error("Error updating rows ", zap.Error(err))
+				zap.S().Error("Error updating rows ", zap.Error(err))
 				return
 			}
-			zap.L().Debug(fmt.Sprintf("Update done on Table: %s", ftable.Name))
+			zap.L().Info(fmt.Sprintf("Update done on Table: %s", ftable.Name))
 		}
 	}
 
@@ -107,7 +109,14 @@ func Run(configPath string, isDryRun bool) {
 		// commit the transaction
 		err = tx.Commit()
 		if err != nil {
-			zap.L().Error(fmt.Sprintf("Error committing transaction: %e", err))
+			zap.S().Error("Failed to commit transaction", zap.Error(err))
+			return
+		}
+	} else {
+		zap.L().Info("Dry run, skipping transaction commit")
+		err = tx.Rollback()
+		if err != nil {
+			zap.S().Error("Failed to rollback transaction", zap.Error(err))
 			return
 		}
 	}

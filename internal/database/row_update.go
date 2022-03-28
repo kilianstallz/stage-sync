@@ -12,7 +12,7 @@ func UpdateRows(ctx context.Context, tx *sql.Tx, tableName string, changedColumn
 	for _, oldRow := range oldRows {
 
 		query := builder.BuildUpdateQuery(tableName, changedColumns, oldRow, updatedRows[0])
-		zap.L().Info(query)
+		zap.S().Debug(query)
 
 		if !isDryRun {
 			_, err := tx.ExecContext(ctx, query)

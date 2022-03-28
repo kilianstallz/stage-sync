@@ -12,7 +12,7 @@ func DeleteRows(ctx context.Context, tx *sql.Tx, tableName string, rows []models
 	for _, row := range rows {
 
 		query := builder.BuildDeleteQuery(tableName, row)
-		zap.L().Info(query)
+		zap.S().Debug(query)
 
 		if !isDryRun {
 			_, err := tx.ExecContext(ctx, query)
