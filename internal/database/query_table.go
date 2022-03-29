@@ -21,11 +21,17 @@ func QueryTables(config *config.Config, sourceDB *sql.DB) []models.Table {
 			panic(err)
 		}
 
+		noDeleteActive := false
+		if table.NoDelete {
+			noDeleteActive = true
+		}
+
 		// create table struct
 		tableStruct := models.Table{
 			Name:        table.Name,
 			Rows:        []models.Row{},
 			PrimaryKeys: table.PrimaryKeys,
+			NoDelete:    noDeleteActive,
 		}
 
 		// iterate over the rows

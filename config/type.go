@@ -21,6 +21,7 @@ type ConfigTable struct {
 	Columns     []string      `yaml:"columns"`
 	PrimaryKeys []string      `yaml:"primaryKeys"`
 	OnlyWhere   []ConfigWhere `yaml:"onlyWhere"`
+	NoDelete 	bool          `yaml:"noDelete"`
 }
 
 type ConfigWhere struct {

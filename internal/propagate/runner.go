@@ -56,6 +56,14 @@ func Run(configPath string, isDryRun bool) {
 	}
 	defer tx.Rollback()
 
+	// recover from panic and rollback
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+			zap.S().Fatal("Recovered from panic with rollback", zap.Any("panic", r))
+		}
+	}()
+
 	// diff the data for each table based on the list of primary keys
 	for _, ftable := range tables {
 
@@ -65,8 +73,10 @@ func Run(configPath string, isDryRun bool) {
 		diffResult := diff.FindDiffResult(ftable, targetTable)
 
 		zap.L().Info(fmt.Sprintf("%d added rows", len(diffResult.AddedRows)))
-		zap.L().Info(fmt.Sprintf("%d deleted rows", len(diffResult.DeletedRows)))
 		zap.L().Info(fmt.Sprintf("%d updated rows", len(diffResult.UpdatedRows.ChangedColumns)))
+		if ftable.NoDelete == false {
+			zap.L().Info(fmt.Sprintf("%d deleted rows", len(diffResult.DeletedRows)))
+		}
 
 		if len(diffResult.AddedRows) == 0 && len(diffResult.DeletedRows) == 0 && len(diffResult.UpdatedRows.ChangedColumns) == 0 {
 			zap.L().Info(fmt.Sprintf("No changes on Table: %s", ftable.Name))
@@ -84,14 +94,18 @@ func Run(configPath string, isDryRun bool) {
 		}
 
 		if len(diffResult.DeletedRows) > 0 {
-			// delete the deleted rows
-			err := database.DeleteRows(ctx, tx, targetTable.Name, diffResult.DeletedRows, isDryRun)
-			if err != nil {
-				zap.L().Error("Error deleting rows ", zap.Error(err))
-				return
-			}
+			if ftable.NoDelete {
+				zap.L().Info(fmt.Sprintf("No delete on Table: %s", ftable.Name))
+			} else {
+				// delete the deleted rows
+				err := database.DeleteRows(ctx, tx, targetTable.Name, diffResult.DeletedRows, isDryRun)
+				if err != nil {
+					zap.L().Error("Error deleting rows ", zap.Error(err))
+					return
+				}
 
-			zap.L().Info(fmt.Sprintf("Delete done on Table: %s", ftable.Name))
+				zap.L().Info(fmt.Sprintf("Delete done on Table: %s", ftable.Name))
+			}
 		}
 
 		if len(diffResult.UpdatedRows.ChangedColumns) > 0 {
@@ -109,6 +123,11 @@ func Run(configPath string, isDryRun bool) {
 		// commit the transaction
 		err = tx.Commit()
 		if err != nil {
+			err := tx.Rollback()
+			if err != nil {
+				zap.S().Error("Failed to rollback transaction", zap.Error(err))
+				return
+			}
 			zap.S().Error("Failed to commit transaction", zap.Error(err))
 			return
 		}

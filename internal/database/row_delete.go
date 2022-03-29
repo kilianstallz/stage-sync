@@ -9,10 +9,17 @@ import (
 )
 
 func DeleteRows(ctx context.Context, tx *sql.Tx, tableName string, rows []models.Row, isDryRun bool) error {
+	opt := zap.NewProductionConfig()
+	opt.OutputPaths = []string{"delete.log"}
+	logger, err := opt.Build()
+	if err != nil {
+		panic(err)
+	}
+	defer logger.Sync()
 	for _, row := range rows {
 
 		query := builder.BuildDeleteQuery(tableName, row)
-		zap.S().Debug(query)
+		logger.Sugar().Info(query)
 
 		if !isDryRun {
 			_, err := tx.ExecContext(ctx, query)
