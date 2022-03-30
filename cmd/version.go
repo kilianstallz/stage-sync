@@ -3,18 +3,17 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
+	"stage-sync-cli/internal"
 )
 
 func init() {
 	rootCmd.AddCommand(versionCmd)
 }
 
-var Version = "dev"
-
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print the version number",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(Version)
+		fmt.Println(internal.Version)
 	},
 }

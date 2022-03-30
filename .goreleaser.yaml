@@ -13,13 +13,10 @@ builds:
       - darwin
     ldflags:
       - -s -w -X stage-sync-cli/cmd.Version={{.Version}}
-archives:
-  - replacements:
-      darwin: Darwin
-      linux: Linux
-      windows: Windows
-      386: i386
-      amd64: x86_64
+
+universal_binaries:
+  - replace: true
+
 release:
   prerelease: auto
 checksum:
