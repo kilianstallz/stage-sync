@@ -12,7 +12,7 @@ builds:
       - windows
       - darwin
     ldflags:
-      - -s -w -X stage-sync-cli/cmd.Version={{.Version}}
+      - -s -w
 
 universal_binaries:
   - replace: true
