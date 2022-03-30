@@ -12,7 +12,7 @@ npx standard-version
 VERSION=$(git describe --tags "$(git rev-list --tags --max-count=1)")
 
 cat > internal/version.go <<EOF
-package version
+package internal
 
 const Version = "$VERSION"
 EOF
@@ -21,7 +21,7 @@ git add .
 git commit -m "chore(prepare): $VERSION"
 
 cat > internal/version.go <<EOF
-package version
+package internal
 
 const Version = "$VERSION-dev"
 EOF
