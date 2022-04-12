@@ -1,46 +1,36 @@
 package config_test
 
 import (
-	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"stage-sync-cli/config"
 	"testing"
 )
 
 func Test_ConfigSuite(t *testing.T) {
-	RegisterFailHandler(Fail)
-	RunSpecs(t, "Config Suite")
+	RegisterTestingT(t)
+	// should return a valid configuration
+	cnfg, err := config.ParseConfigFromFile("./mocks/valid.yaml")
+	Expect(err).To(BeNil())
+	Expect(cnfg.SourceDatabase).To(Not(BeNil()))
+	Expect(cnfg.TargetDatabase).To(Not(BeNil()))
+	Expect(cnfg.Tables).To(Not(BeNil()))
+	Expect(len(cnfg.Tables)).ShouldNot(BeZero())
+	Expect(len(cnfg.Tables)).Should(Equal(2))
+	Expect(len(cnfg.Tables[0].PrimaryKeys)).Should(Equal(1))
+
+	Expect(cnfg.Tables[0].PrimaryKeys).Should(ContainElement("Id"))
+	Expect(cnfg.Tables[1].PrimaryKeys).Should(ContainElement("Id"))
+
+	Expect(len(cnfg.Tables[1].OnlyWhere)).Should(Equal(1))
+
+	Expect(cnfg.Tables[0].NoDelete).To(BeFalse())
+	Expect(cnfg.Tables[1].NoDelete).To(BeTrue())
+
+	// should fail on missing file
+	_, err = config.ParseConfigFromFile("./mocks/missing.yaml")
+	Expect(err).ToNot(BeNil())
+
+	// should fail on invalid file
+	_, err = config.ParseConfigFromFile("./mocks/invalid.js")
+	Expect(err).ToNot(BeNil())
 }
-
-var _ = Describe("Parse Configuration file", func() {
-	Context("when the configuration file is valid", func() {
-		It("should return a valid configuration", func() {
-			config, err := config.ParseConfigFromFile("./mocks/valid.yaml")
-			Expect(err).To(BeNil())
-			Expect(config.SourceDatabase).To(Not(BeNil()))
-			Expect(config.TargetDatabase).To(Not(BeNil()))
-			Expect(config.Tables).To(Not(BeNil()))
-			Expect(len(config.Tables)).ShouldNot(BeZero())
-			Expect(len(config.Tables)).Should(Equal(2))
-			Expect(len(config.Tables[0].PrimaryKeys)).Should(Equal(1))
-
-			Expect(config.Tables[0].PrimaryKeys).Should(ContainElement("Id"))
-			Expect(config.Tables[1].PrimaryKeys).Should(ContainElement("Id"))
-
-			Expect(len(config.Tables[1].OnlyWhere)).Should(Equal(1))
-
-			Expect(config.Tables[0].NoDelete).To(BeFalse())
-			Expect(config.Tables[1].NoDelete).To(BeTrue())
-		})
-
-		It("should fail on missing file", func() {
-			_, err := config.ParseConfigFromFile("./mocks/missing.yaml")
-			Expect(err).ToNot(BeNil())
-		})
-
-		It("should fail on invalid file", func() {
-			_, err := config.ParseConfigFromFile("./mocks/invalid.js")
-			Expect(err).ToNot(BeNil())
-		})
-	})
-})
