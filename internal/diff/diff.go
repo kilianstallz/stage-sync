@@ -2,8 +2,8 @@ package diff
 
 import (
 	"go.uber.org/zap"
-	"stage-sync-cli/internal/table"
-	"stage-sync-cli/models"
+	"stage-sync/internal/table"
+	"stage-sync/models"
 )
 
 func FindDiffResult(source models.Table, target models.Table) models.DiffResult {

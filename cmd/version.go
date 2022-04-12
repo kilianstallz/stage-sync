@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"stage-sync-cli/internal"
+	"stage-sync/internal"
 )
 
 func init() {

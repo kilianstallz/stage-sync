@@ -6,11 +6,11 @@ import (
 	"fmt"
 	_ "github.com/lib/pq"
 	"go.uber.org/zap"
-	"stage-sync-cli/config"
-	"stage-sync-cli/internal/database"
-	"stage-sync-cli/internal/database/builder"
-	"stage-sync-cli/internal/diff"
-	"stage-sync-cli/internal/table"
+	"stage-sync/config"
+	"stage-sync/internal/database"
+	"stage-sync/internal/database/builder"
+	"stage-sync/internal/diff"
+	"stage-sync/internal/table"
 )
 
 func Run(configPath string, isDryRun bool) {

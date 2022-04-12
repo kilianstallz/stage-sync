@@ -3,8 +3,8 @@ package builder
 import (
 	"github.com/doug-martin/goqu/v9"
 	"go.uber.org/zap"
-	"stage-sync-cli/internal/database/utils"
-	"stage-sync-cli/models"
+	"stage-sync/internal/database/utils"
+	"stage-sync/models"
 	"strings"
 )
 

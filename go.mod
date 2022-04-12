@@ -1,4 +1,4 @@
-module stage-sync-cli
+module stage-sync
 
 go 1.18
 

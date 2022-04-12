@@ -1,8 +1,8 @@
 package diff_test
 
 import (
-	"stage-sync-cli/internal/diff"
-	"stage-sync-cli/models"
+	"stage-sync/internal/diff"
+	"stage-sync/models"
 	"testing"
 )
 

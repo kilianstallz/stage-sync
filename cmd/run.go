@@ -4,7 +4,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
-	"stage-sync-cli/internal/propagate"
+	"stage-sync/internal/propagate"
 )
 
 var scriptFile string

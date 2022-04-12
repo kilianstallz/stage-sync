@@ -2,8 +2,8 @@ package database
 
 import (
 	"fmt"
-	"stage-sync-cli/config"
-	"stage-sync-cli/models"
+	"stage-sync/config"
+	"stage-sync/models"
 	"strconv"
 	"strings"
 )

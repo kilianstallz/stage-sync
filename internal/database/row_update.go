@@ -3,9 +3,9 @@ package database
 import (
 	"context"
 	"database/sql"
-	"stage-sync-cli/internal/database/builder"
-	"stage-sync-cli/internal/sql_log"
-	"stage-sync-cli/models"
+	"stage-sync/internal/database/builder"
+	"stage-sync/internal/sql_log"
+	"stage-sync/models"
 )
 
 func UpdateRows(ctx context.Context, tx *sql.Tx, tableName string, changedColumns []string, oldRows []models.Row, updatedRows []models.Row, isDryRun bool) error {

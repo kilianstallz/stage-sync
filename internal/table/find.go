@@ -2,7 +2,7 @@ package table
 
 import (
 	"reflect"
-	"stage-sync-cli/models"
+	"stage-sync/models"
 )
 
 func FindTable(tables []models.Table, name string) models.Table {

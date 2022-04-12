@@ -1,7 +1,7 @@
 package main
 
 import (
-	"stage-sync-cli/cmd"
+	"stage-sync/cmd"
 )
 
 func main() {

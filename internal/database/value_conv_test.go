@@ -3,7 +3,7 @@ package database_test
 import (
 	"database/sql"
 	"fmt"
-	"stage-sync-cli/internal/database"
+	"stage-sync/internal/database"
 	"testing"
 	"time"
 )
@@ -38,7 +38,6 @@ func testValidFloat(t *testing.T) {
 		t.Errorf("nullInt.Float64 = %f, want 12.1", database.ConvertDbValue(nullInt))
 	}
 }
-
 
 func testValidString(t *testing.T) {
 	nullInt := sql.NullString{String: "a", Valid: true}

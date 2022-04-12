@@ -3,7 +3,7 @@ package builder
 import (
 	"github.com/doug-martin/goqu/v9"
 	"go.uber.org/zap"
-	"stage-sync-cli/models"
+	"stage-sync/models"
 )
 
 // BuildInsertQuery builds an insert query from the given parameters

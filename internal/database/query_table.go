@@ -7,9 +7,9 @@ import (
 	"github.com/shopspring/decimal"
 	"go.uber.org/zap"
 	"reflect"
-	"stage-sync-cli/config"
-	"stage-sync-cli/internal/database/builder"
-	"stage-sync-cli/models"
+	"stage-sync/config"
+	"stage-sync/internal/database/builder"
+	"stage-sync/models"
 	"time"
 )
 

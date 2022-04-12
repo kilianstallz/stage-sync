@@ -3,7 +3,7 @@ package builder
 import (
 	"github.com/doug-martin/goqu/v9"
 	"go.uber.org/zap"
-	"stage-sync-cli/models"
+	"stage-sync/models"
 )
 
 // BuildDeleteQuery builds an delete query from the given parameters
@@ -14,7 +14,7 @@ func BuildDeleteQuery(tableName string, rows models.Row) string {
 			goqu.C(column.Name).Eq(column.Value),
 		)
 	}
-	query,_ , err := q.ToSQL()
+	query, _, err := q.ToSQL()
 	if err != nil {
 		zap.S().Fatal(zap.Error(err))
 	}

@@ -2,8 +2,8 @@ package builder_test
 
 import (
 	"fmt"
-	"stage-sync-cli/config"
-	"stage-sync-cli/internal/database/builder"
+	"stage-sync/config"
+	"stage-sync/internal/database/builder"
 	"testing"
 )
 
@@ -42,7 +42,7 @@ func TestBuildSelectQuery(t *testing.T) {
 	}
 }
 
-func Test_SingleSelect (t *testing.T) {
+func Test_SingleSelect(t *testing.T) {
 	tableConfigs := []config.ConfigTable{
 		{
 			Name: "table2",

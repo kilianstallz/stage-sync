@@ -2,8 +2,8 @@ package builder_test
 
 import (
 	. "github.com/onsi/gomega"
-	"stage-sync-cli/internal/database/builder"
-	"stage-sync-cli/models"
+	"stage-sync/internal/database/builder"
+	"stage-sync/models"
 	"testing"
 )
 
