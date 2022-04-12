@@ -24,3 +24,4 @@ jobs:
         with:
           prefix: github.com/kilianstallz/stage-sync
           coverageCommand: go test -coverprofile=c.out ./...
+          debug: true
