@@ -39,7 +39,7 @@ var _ = Describe("Parse Configuration file", func() {
 		})
 
 		It("should fail on invalid file", func() {
-			_, err := config.ParseConfigFromFile("./type.go")
+			_, err := config.ParseConfigFromFile("./mocks/invalid.js")
 			Expect(err).ToNot(BeNil())
 		})
 	})
