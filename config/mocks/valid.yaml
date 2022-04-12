@@ -1,0 +1,47 @@
+
+targetDatabase:
+  credentials:
+    user: Test
+    password: password
+    database: MFP_DEMO2
+    host: post.database.azure.com
+    port: 5432
+    sslMode: "require"
+  schema: public
+
+
+sourceDatabase:
+  credentials:
+    user: Test
+    password: password
+    database: MFP_DEV2
+    host: post.database.azure.com
+    port: 5432
+    sslMode: "require"
+  schema: public
+
+tables:
+  - name: EquipmentOperatingUnits
+    columns:
+      - Id
+      - Name
+      - Archived
+      - Description
+    primaryKeys:
+      - Id
+
+  - name: EquipmentCategories
+    columns:
+      - Id
+      - Name
+      - Archived
+      - Description
+      - IsSelectableCategory
+      - ParentEquipmentCategoryId
+    primaryKeys:
+      - Id
+    onlyWhere:
+      - name: Id
+        type: int
+        value: 1
+    noDelete: true # Deactivate delete for this table

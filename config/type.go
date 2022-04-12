@@ -36,6 +36,7 @@ type ConfigDB struct {
 	User     string `yaml:"user"`
 	Password string `yaml:"password"`
 	Database string `yaml:"database"`
+	SslMode string `yaml:"sslMode"`
 }
 
 func ParseConfigFromFile(path string) (*Config, error) {

@@ -39,6 +39,7 @@ func testValidFloat(t *testing.T) {
 	}
 }
 
+
 func testValidString(t *testing.T) {
 	nullInt := sql.NullString{String: "a", Valid: true}
 	if fmt.Sprintf("%v", database.ConvertDbValue(nullInt)) != "a" {

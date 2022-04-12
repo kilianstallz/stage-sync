@@ -25,6 +25,11 @@ func TestBuildUpdateQuery(t *testing.T) {
 			Value: 1.6346346,
 			Type:  "float64",
 		},
+		models.Column{
+			Name:  "Text",
+			Value: "<html> this is some \"text\" </html>",
+			Type:  "string",
+		},
 	}
 	newRow := models.Row{
 		models.Column{
@@ -42,15 +47,21 @@ func TestBuildUpdateQuery(t *testing.T) {
 			Value: 2.5,
 			Type:  "float64",
 		},
+		models.Column{
+			Name:  "Text",
+			Value: "<html> this is some \"new text\" </html>",
+			Type:  "string",
+		},
 	}
 	changedColumns := []string{
 		"Age",
+		"Text",
 	}
 
 	query := builder.BuildUpdateQuery(tableName, changedColumns, oldRow, newRow)
 	t.Log(query)
-	if query != fmt.Sprintf("UPDATE %q SET \"Age\" = 2.500000 WHERE \"Id\" = 1 AND \"Name\" = 'John' AND \"Age\" = 1.634635", tableName) {
-		t.Errorf("expected \n 'UPDATE %q SET \"Age\" = 2.5 WHERE \"Id\" = 1 AND \"Name\" = 'John' AND \"Age\" = 1.634635' \n got \n '%s'", tableName, query)
+	if query != fmt.Sprintf("UPDATE %q SET \"Text\"='<html> this is some \"new text\" </html>' WHERE ((\"Id\" = 1) AND (\"Name\" = 'John') AND (\"Age\" = 1.6346346) AND (\"Text\" = '<html> this is some \"text\" </html>'));", tableName) {
+		t.Errorf("UPDATE %q SET \"Text\"='<html> this is some \"new text\" </html>' WHERE ((\"Id\" = 1) AND (\"Name\" = 'John') AND (\"Age\" = 1.6346346) AND (\"Text\" = '<html> this is some \"text\" </html>'));' \n got \n '%s'", tableName, query)
 	}
 
 }

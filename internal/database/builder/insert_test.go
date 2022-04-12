@@ -30,7 +30,7 @@ func TestBuildInsertQuery(t *testing.T) {
 	}
 
 	query := builder.BuildInsertQuery(tableName, rows[0])
-	if query != fmt.Sprintf("INSERT INTO %q (\"Id\", \"Name\", \"Age\") VALUES (1, 'John', 1.6346346)", tableName) {
-		t.Errorf("expected 'INSERT INTO %q (\"Id\", \"Name\", \"Age\") VALUES (1, 'John', 1.6346346)', got '%s'", tableName, query)
+	if query != fmt.Sprintf("INSERT INTO %q (\"Age\", \"Id\", \"Name\") VALUES (1.6346346, 1, 'John');", tableName) {
+		t.Errorf("expected 'INSERT INTO %q (\"Age\", \"Id\", \"Name\") VALUES (1.6346346, 1, 'John');', got '%s'", tableName, query)
 	}
 }

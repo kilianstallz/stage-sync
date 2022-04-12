@@ -32,6 +32,18 @@ func TestBuildSelectQuery(t *testing.T) {
 				},
 			},
 		},
+	}
+
+	query := builder.BuildSelectQuery(tableConfigs[0])
+	t.Log(query)
+
+	if query != fmt.Sprintf("SELECT \"Id\", \"Name\", \"Age\" FROM \"table1\" WHERE (\"Id\" IN ('1', '2'));") {
+		t.Errorf("'SELECT \"Id\", \"Name\", \"Age\" FROM \"table1\" WHERE (\"Id\" IN ('1', '2'));', got '%s'", query)
+	}
+}
+
+func Test_SingleSelect (t *testing.T) {
+	tableConfigs := []config.ConfigTable{
 		{
 			Name: "table2",
 			PrimaryKeys: []string{
@@ -43,17 +55,10 @@ func TestBuildSelectQuery(t *testing.T) {
 			},
 		},
 	}
+	query2 := builder.BuildSelectQuery(tableConfigs[0])
+	t.Log(query2)
 
-	query := builder.BuildSelectQuery(tableConfigs[0])
-
-	if query != fmt.Sprintf("SELECT \"Id\", \"Name\", \"Age\" FROM %q WHERE \"Id\" = 1 AND \"Id\" = 2", tableConfigs[0].Name) {
-		t.Errorf("SELECT \"Id\", \"Name\", \"Age\" FROM %q WHERE \"Id\" = 1 AND \"Id\" = 2, got '%s'", tableConfigs[0].Name, query)
+	if query2 != fmt.Sprintf("SELECT \"Name\", \"Age\" FROM \"table2\";") {
+		t.Errorf("expected 'SELECT \"Name\", \"Age\" FROM \"table2\";', got '%s'", query2)
 	}
-
-	query2 := builder.BuildSelectQuery(tableConfigs[1])
-
-	if query2 != fmt.Sprintf("SELECT \"Name\", \"Age\" FROM %q", tableConfigs[1].Name) {
-		t.Errorf("expected 'SELECT \"Name\", \"Age\" FROM %q', got '%s'", tableConfigs[1].Name, query2)
-	}
-
 }

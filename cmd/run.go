@@ -28,12 +28,7 @@ var runPropagation = &cobra.Command{
 	Short: "Runs the propagation",
 	Run: func(cmd *cobra.Command, args []string) {
 		var logger *zap.Logger
-		if !dryRun && logLevel == "debug" {
-			logger, _ = zap.NewDevelopment()
-		} else {
-			logger, _ = zap.NewProduction()
-		}
-
+		logger, _ = zap.NewDevelopment()
 		defer logger.Sync()
 		zap.ReplaceGlobals(logger)
 

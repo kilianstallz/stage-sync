@@ -17,5 +17,9 @@ func BuildConnectionString(credentials config.ConfigDB) string {
 	if userPart != "" {
 		userPart = fmt.Sprintf("%s@", userPart)
 	}
-	return fmt.Sprintf("postgres://%s%s:%d/%s?sslmode=require", userPart, credentials.Host, credentials.Port, credentials.Database)
+	cs := fmt.Sprintf("postgres://%s%s:%d/%s", userPart, credentials.Host, credentials.Port, credentials.Database)
+	if credentials.SslMode != "" {
+		cs = fmt.Sprintf("%s?sslmode=%s", cs, credentials.SslMode)
+	}
+	return cs
 }

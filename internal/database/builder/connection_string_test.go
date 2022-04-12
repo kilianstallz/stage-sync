@@ -1,41 +1,53 @@
 package builder_test
 
 import (
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 	"stage-sync-cli/config"
 	"stage-sync-cli/internal/database/builder"
 	"testing"
 )
 
 func TestBuildConnectionString(t *testing.T) {
-	testCases := []config.ConfigDB{
-		{
-			User:     "user",
-			Password: "password",
-			Host:     "host",
-			Port:     5432,
-			Database: "database",
-		},
-		{
-			User:     "",
-			Password: "",
-			Host:     "localhost",
-			Port:     5432,
-			Database: "database",
-		},
-	}
-	results := []string{
-		"postgres://user:password@host:5432/database?sslmode=require",
-		"postgres://localhost:5432/database?sslmode=require",
-	}
-
-	for i, testCase := range testCases {
-		result := builder.BuildConnectionString(testCase)
-		if result != results[i] {
-			t.Errorf("expected '%s', got '%s'", results[i], result)
-		}
-	}
-
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "BuildConnectionString Suite")
 }
 
+var _ = Describe("Build Connection Strings", func () {
+	Describe("Postgres", func () {
+		It("should build a connection string", func () {
+			config := config.ConfigDB{
+				User:     "user",
+				Password: "password",
+				Host:     "host",
+				Port:     5432,
+				Database: "database",
+				SslMode: "require",
+			}
+			result := builder.BuildConnectionString(config)
+			Expect(result).To(Equal("postgres://user:password@host:5432/database?sslmode=require"))
+		})
+		It("should build without sslmode", func () {
+			config := config.ConfigDB{
+				User:     "user",
+				Password: "password",
+				Host:     "host",
+				Port:     5432,
+				Database: "database",
+			}
+			result := builder.BuildConnectionString(config)
+			Expect(result).To(Equal("postgres://user:password@host:5432/database"))
+		})
+		It("should build without creds", func () {
+			config := config.ConfigDB{
+				Host:     "host",
+				Port:     5432,
+				Database: "database",
+			}
+			result := builder.BuildConnectionString(config)
+			Expect(result).To(Equal("postgres://host:5432/database"))
+		})
+	})
+})
 
 

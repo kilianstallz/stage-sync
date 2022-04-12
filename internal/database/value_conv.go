@@ -2,6 +2,8 @@ package database
 
 import (
 	"database/sql"
+	numeric "github.com/jackc/pgtype/ext/shopspring-numeric"
+	"github.com/shopspring/decimal"
 	"go.uber.org/zap"
 )
 
@@ -37,6 +39,23 @@ func ConvertDbValue(v interface{}) interface{} {
 			return v.(sql.NullTime).Time
 		}
 		return nil
+	case numeric.Numeric:
+		v, err := v.(numeric.Numeric).Value()
+		if err != nil {
+			zap.S().Errorw("Error converting numeric value", "error", err)
+			return nil
+		}
+		return v
+	case decimal.NullDecimal:
+		if v.(decimal.NullDecimal).Valid {
+			return v.(decimal.NullDecimal).Decimal
+		}
+		v, err := v.(decimal.NullDecimal).Value()
+		if err != nil {
+			zap.S().Errorw("Error converting numeric value", "error", err)
+			return nil
+		}
+		return v
 	default:
 		zap.L().Error("unsupported type", zap.Any("type", v))
 		return v

@@ -1,13 +1,14 @@
 package builder_test
 
 import (
-	"fmt"
+	. "github.com/onsi/gomega"
 	"stage-sync-cli/internal/database/builder"
 	"stage-sync-cli/models"
 	"testing"
 )
 
 func TestBuildDeleteQuery(t *testing.T) {
+	RegisterTestingT(t)
 	tableName := "users"
 	row := models.Row{
 		models.Column{
@@ -28,7 +29,6 @@ func TestBuildDeleteQuery(t *testing.T) {
 	}
 
 	query := builder.BuildDeleteQuery(tableName, row)
-	if query != fmt.Sprintf("DELETE FROM %q WHERE \"Id\" = 1 AND \"Name\" = 'John' AND \"Age\" = 1.634635", tableName) {
-		t.Errorf("expected 'DELETE FROM %q WHERE \"Id\" = 1 AND \"Name\" = 'John' AND \"Age\" = 1.634635', got '%s'", tableName, query)
-	}
+	Expect(query).To(Equal("DELETE FROM \"users\" WHERE ((\"Id\" = 1) AND (\"Name\" = 'John') AND (\"Age\" = 1.6346346));"))
+
 }
