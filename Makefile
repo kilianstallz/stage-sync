@@ -5,7 +5,7 @@ GO_TEST_OUTFILE         := ./c.out
 GOLANG_DOCKER_IMAGE     := golang:1.18
 GOLANG_DOCKER_CONTAINER := test-container
 CC_TEST_REPORTER_ID		:= ${CC_TEST_REPORTER_ID}
-CC_PREFIX				:= github.com/kilianstallz/stage-sync
+CC_PREFIX				:= stage-sync
 
 commit:
 	@npx git-cz
