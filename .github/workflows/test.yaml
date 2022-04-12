@@ -14,7 +14,7 @@ jobs:
         with:
           go-version: 1.18
       - name: Run tests
-        run: go test -cover ./...
+        run: go test ./...
   coverage:
     needs:
       - build
@@ -26,7 +26,7 @@ jobs:
         uses: actions/setup-go@v1
         with:
           go-version: 1.18
-      - uses: paambaati/codeclimate-action@latest
+      - uses: paambaati/codeclimate-action@v3.0.0
         env:
           CC_TEST_REPORTER_ID: 63e33ad9370798b8105fe2e3bf55e7d43293c31be24da372432076c0ce2feb0a
         with:
