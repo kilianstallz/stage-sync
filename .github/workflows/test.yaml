@@ -10,18 +10,9 @@ jobs:
     name: coverage
     steps:
       - uses: actions/checkout@v2
-      - name: Install dependencies
-        uses: actions/setup-go@v1
-        with:
-          go-version: 1.18
-      - name: Run tests
-        run: go test -coverprofile=cov.out ./...
           
       - name: Code Climate Coverage Action
-        uses: paambaati/codeclimate-action@v3.0.0
+        run: |
+          make test-ci
         env:
-          CC_TEST_REPORTER_ID: 63e33ad9370798b8105fe2e3bf55e7d43293c31be24da372432076c0ce2feb0a
-        with:
-          prefix: github.com/kilianstallz/stage-sync
-          coverageCommand: go test -coverprofile=c.out ./...
-          debug: true
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
