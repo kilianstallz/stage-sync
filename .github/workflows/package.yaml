@@ -30,7 +30,7 @@ jobs:
       - name: Run Tests
         run: go test ./... -cover
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v2
+        uses: goreleaser/goreleaser-action@v3
         with:
           distribution: goreleaser
           version: latest
