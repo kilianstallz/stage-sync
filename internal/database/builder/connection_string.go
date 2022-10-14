@@ -2,7 +2,7 @@ package builder
 
 import (
 	"fmt"
-	"stage-sync/config"
+	"stage-sync/internal/config"
 )
 
 // BuildConnectionString builds a postgres connection string in url form from the config

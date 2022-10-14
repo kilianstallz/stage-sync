@@ -3,7 +3,7 @@ package builder
 import (
 	"github.com/doug-martin/goqu/v9"
 	"go.uber.org/zap"
-	"stage-sync/config"
+	"stage-sync/internal/config"
 )
 
 // BuildSelectQuery build a select query from the given parameters

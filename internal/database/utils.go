@@ -2,7 +2,7 @@ package database
 
 import (
 	"fmt"
-	"stage-sync/config"
+	"stage-sync/internal/config"
 	"stage-sync/models"
 	"strconv"
 	"strings"

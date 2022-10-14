@@ -1,6 +1,7 @@
 package diff
 
 import (
+	"github.com/samber/lo"
 	"go.uber.org/zap"
 	"stage-sync/internal/table"
 	"stage-sync/models"
@@ -42,13 +43,14 @@ func FindRemovedRows(targetTable models.Table, sourceTable models.Table, primary
 }
 
 func FindAddedAndChangedRows(sourceTable models.Table, targetTable models.Table, primaryKeys []string, diffResult *models.DiffResult) {
-	for _, sourceRow := range sourceTable.Rows {
+	lo.ForEach[models.Row](sourceTable.Rows, func(sourceRow models.Row, _ int) {
+
 		targetRow := table.FindRow(targetTable.Rows, primaryKeys, sourceRow)
+
 		if targetRow == nil {
 			diffResult.AddedRows = append(diffResult.AddedRows, sourceRow)
-		}
-		if targetRow != nil {
-			for _, sourceColumn := range sourceRow {
+		} else {
+			lo.ForEach[models.Column](sourceRow, func(sourceColumn models.Column, _ int) {
 				targetColumn := table.FindColumn(*targetRow, sourceColumn.Name)
 				if targetColumn != nil {
 					if sourceColumn.Value != targetColumn.Value {
@@ -57,7 +59,7 @@ func FindAddedAndChangedRows(sourceTable models.Table, targetTable models.Table,
 						diffResult.UpdatedRows.After = append(diffResult.UpdatedRows.After, sourceRow)
 					}
 				}
-			}
+			})
 		}
-	}
+	})
 }

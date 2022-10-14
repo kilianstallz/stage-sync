@@ -7,7 +7,7 @@ import (
 	"github.com/shopspring/decimal"
 	"go.uber.org/zap"
 	"reflect"
-	"stage-sync/config"
+	"stage-sync/internal/config"
 	"stage-sync/internal/database/builder"
 	"stage-sync/models"
 	"time"
@@ -27,7 +27,7 @@ func buildTable(table config.ConfigTable, sourceDB *sql.DB) models.Table {
 	q := builder.BuildSelectQuery(table)
 	dbRows, err := sourceDB.Query(q)
 	if err != nil {
-		zap.S().Fatal("Error querying source database", zap.Error(err))
+		zap.S().Fatal("Error querying database", zap.Error(err))
 	}
 	defer dbRows.Close()
 

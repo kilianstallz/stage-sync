@@ -1,6 +1,7 @@
 package table
 
 import (
+	"github.com/samber/lo"
 	"reflect"
 	"stage-sync/models"
 )
@@ -15,20 +16,23 @@ func FindTable(tables []models.Table, name string) models.Table {
 }
 
 func FindColumn(row models.Row, name string) *models.Column {
-	for _, column := range row {
-		if column.Name == name {
-			return &column
-		}
+	c, ok := lo.Find[models.Column](row, func(column models.Column) bool {
+		return column.Name == name
+	})
+	if !ok {
+		return nil
 	}
-	return nil
+	return &c
 }
 
 // FindRow finds and returns a row where all the primary keys match the values in the row.
 func FindRow(rows []models.Row, keys []string, row models.Row) *models.Row {
 	findPkColsMap := make(map[string]interface{})
 	for _, key := range keys {
-		col := *FindColumn(row, key)
-		findPkColsMap[key] = col.Value
+		col := FindColumn(row, key)
+		if col != nil {
+			findPkColsMap[key] = col.Value
+		}
 	}
 
 	for _, row := range rows {
@@ -46,7 +50,7 @@ func FindRow(rows []models.Row, keys []string, row models.Row) *models.Row {
 			}
 		}
 
-		if allTrue(keyArray) {
+		if AllTrue(keyArray) {
 			return &row
 		}
 
@@ -54,11 +58,10 @@ func FindRow(rows []models.Row, keys []string, row models.Row) *models.Row {
 	return nil
 }
 
-func allTrue(array []bool) bool {
-	for _, value := range array {
-		if !value {
-			return false
-		}
+func AllTrue(array []bool) bool {
+	b := lo.IndexOf[bool](array, false)
+	if b > -1 { // -1 not found
+		return false
 	}
 	return true
 }

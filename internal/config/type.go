@@ -2,13 +2,13 @@ package config
 
 import (
 	"gopkg.in/yaml.v2"
-	"io/ioutil"
+	"os"
 )
 
 type Config struct {
-	SourceDatabase DbConnection `yaml:"sourceDatabase"`
-	TargetDatabase DbConnection `yaml:"targetDatabase"`
-	Tables []ConfigTable `yaml:"tables"`
+	SourceDatabase DbConnection  `yaml:"sourceDatabase"`
+	TargetDatabase DbConnection  `yaml:"targetDatabase"`
+	Tables         []ConfigTable `yaml:"tables"`
 }
 
 type DbConnection struct {
@@ -21,7 +21,7 @@ type ConfigTable struct {
 	Columns     []string      `yaml:"columns"`
 	PrimaryKeys []string      `yaml:"primaryKeys"`
 	OnlyWhere   []ConfigWhere `yaml:"onlyWhere"`
-	NoDelete 	bool          `yaml:"noDelete"`
+	NoDelete    bool          `yaml:"noDelete"`
 }
 
 type ConfigWhere struct {
@@ -36,12 +36,12 @@ type ConfigDB struct {
 	User     string `yaml:"user"`
 	Password string `yaml:"password"`
 	Database string `yaml:"database"`
-	SslMode string `yaml:"sslMode"`
+	SslMode  string `yaml:"sslMode"`
 }
 
 func ParseConfigFromFile(path string) (*Config, error) {
 	// Read file from path
-	f, err := ioutil.ReadFile(path)
+	f, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}

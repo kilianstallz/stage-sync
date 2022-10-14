@@ -2,7 +2,7 @@ package builder_test
 
 import (
 	"fmt"
-	"stage-sync/config"
+	"stage-sync/internal/config"
 	"stage-sync/internal/database/builder"
 	"testing"
 )

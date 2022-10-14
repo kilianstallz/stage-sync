@@ -4,10 +4,12 @@ go 1.18
 
 require (
 	github.com/doug-martin/goqu/v9 v9.18.0
+	github.com/faiface/pixel v0.10.0
 	github.com/jackc/pgtype v1.10.0
 	github.com/lib/pq v1.10.4
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.19.0
+	github.com/samber/lo v1.29.0
 	github.com/shopspring/decimal v1.3.1
 	github.com/spf13/cobra v1.3.0
 	github.com/spf13/viper v1.10.0
@@ -16,7 +18,12 @@ require (
 )
 
 require (
+	github.com/faiface/glhf v0.0.0-20181018222622-82a6317ac380 // indirect
+	github.com/faiface/mainthread v0.0.0-20171120011319-8b78f0a41ae3 // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
+	github.com/go-gl/gl v0.0.0-20190320180904-bf2b1f2f34d7 // indirect
+	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20200222043503-6f7a984d4dc4 // indirect
+	github.com/go-gl/mathgl v0.0.0-20190416160123-c4601bc793c7 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
@@ -25,6 +32,7 @@ require (
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
 	github.com/nxadm/tail v1.4.8 // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
+	github.com/pkg/errors v0.8.1 // indirect
 	github.com/spf13/afero v1.6.0 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
@@ -33,6 +41,8 @@ require (
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.7.0 // indirect
 	golang.org/x/crypto v0.0.0-20220408190544-5352b0902921 // indirect
+	golang.org/x/exp v0.0.0-20220303212507-bbda1eaf7a17 // indirect
+	golang.org/x/image v0.0.0-20190802002840-cff245a6509b // indirect
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
 	golang.org/x/sys v0.0.0-20220330033206-e17cdc41300f // indirect
 	golang.org/x/text v0.3.7 // indirect

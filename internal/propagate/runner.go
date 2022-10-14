@@ -6,7 +6,7 @@ import (
 	"fmt"
 	_ "github.com/lib/pq"
 	"go.uber.org/zap"
-	"stage-sync/config"
+	"stage-sync/internal/config"
 	"stage-sync/internal/database"
 	"stage-sync/internal/database/builder"
 	"stage-sync/internal/diff"

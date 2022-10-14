@@ -3,7 +3,7 @@ package builder_test
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"stage-sync/config"
+	"stage-sync/internal/config"
 	"stage-sync/internal/database/builder"
 	"testing"
 )

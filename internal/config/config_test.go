@@ -2,7 +2,7 @@ package config_test
 
 import (
 	. "github.com/onsi/gomega"
-	"stage-sync/config"
+	"stage-sync/internal/config"
 	"testing"
 )
 
