@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     name: coverage
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
           
       - name: Code Climate Coverage Action
         run: |
