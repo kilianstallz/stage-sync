@@ -2,12 +2,10 @@ package propagate
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq"
 	"go.uber.org/zap"
 	"stage-sync/internal/config"
-	"stage-sync/internal/database"
 	"stage-sync/internal/database/builder"
 	"stage-sync/internal/diff"
 	"stage-sync/internal/table"
@@ -17,31 +15,18 @@ func Run(configPath string, isDryRun bool) {
 	zap.L().Info("Starting propagation")
 	conf, _ := config.ParseConfigFromFile(configPath)
 
-	// Get the source database connection string.
-	sourceDbConnectionString := builder.BuildConnectionString(conf.SourceDatabase.Credentials)
-
 	// Get the source database connection.
-	sourceDB, err := database.NewPostgresClient(sourceDbConnectionString)
-	if err != nil {
-		zap.S().Fatal("Failed to connect to source database", zap.Error(err))
-	}
+	sourceDB := builder.NewPostgresClient(conf.SourceDatabase.Credentials)
 
-	tables := database.QueryTables(conf, sourceDB)
-
+	tables := sourceDB.QueryTables(conf)
 	sourceDB.Close()
 
-	// Get the target database connection string.
-	targetDbConnectionString := builder.BuildConnectionString(conf.TargetDatabase.Credentials)
-
 	// Get the target database connection.
-	targetDB, err := database.NewPostgresClient(targetDbConnectionString)
-	if err != nil {
-		zap.S().Fatal("Failed to connect to target database", zap.Error(err))
-	}
+	targetDB := builder.NewPostgresClient(conf.TargetDatabase.Credentials)
 
-	targetTables := database.QueryTables(conf, targetDB)
+	targetTables := targetDB.QueryTables(conf)
 
-	defer func(targetDB *sql.DB) {
+	defer func(targetDB builder.QueryBuilder) {
 		err := targetDB.Close()
 		if err != nil {
 			zap.S().Error("Failed to close target database connection", zap.Error(err))
@@ -84,7 +69,7 @@ func Run(configPath string, isDryRun bool) {
 		}
 
 		if len(diffResult.AddedRows) > 0 {
-			err := database.InsertRows(ctx, tx, targetTable.Name, diffResult.AddedRows, isDryRun)
+			err := targetDB.InsertRows(ctx, tx, targetTable.Name, diffResult.AddedRows, isDryRun)
 			if err != nil {
 				zap.L().Error("Error inserting rows ", zap.Error(err))
 				return
@@ -98,7 +83,7 @@ func Run(configPath string, isDryRun bool) {
 				zap.L().Info(fmt.Sprintf("No delete on Table: %s", ftable.Name))
 			} else {
 				// delete the deleted rows
-				err := database.DeleteRows(ctx, tx, targetTable.Name, diffResult.DeletedRows, isDryRun)
+				err := targetDB.DeleteRows(ctx, tx, targetTable.Name, diffResult.DeletedRows, isDryRun)
 				if err != nil {
 					zap.L().Error("Error deleting rows ", zap.Error(err))
 					return
@@ -110,7 +95,7 @@ func Run(configPath string, isDryRun bool) {
 
 		if len(diffResult.UpdatedRows.ChangedColumns) > 0 {
 			// update the updated rows
-			err = database.UpdateRows(ctx, tx, targetTable.Name, diffResult.UpdatedRows.ChangedColumns, diffResult.UpdatedRows.Before, diffResult.UpdatedRows.After, isDryRun)
+			err = targetDB.UpdateRows(ctx, tx, targetTable.Name, diffResult.UpdatedRows.ChangedColumns, diffResult.UpdatedRows.Before, diffResult.UpdatedRows.After, isDryRun)
 			if err != nil {
 				zap.S().Error("Error updating rows ", zap.Error(err))
 				return

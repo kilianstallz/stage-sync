@@ -1,10 +1,10 @@
-package builder_test
+package postgres_test
 
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"stage-sync/internal/config"
-	"stage-sync/internal/database/builder"
+	"stage-sync/internal/database/postgres"
 	"testing"
 )
 
@@ -24,7 +24,7 @@ var _ = Describe("Build Connection Strings", func() {
 				Database: "database",
 				SslMode:  "require",
 			}
-			result := builder.BuildConnectionString(config)
+			result := postgres.BuildConnectionString(config)
 			Expect(result).To(Equal("postgres://user:password@host:5432/database?sslmode=require"))
 		})
 		It("should build without sslmode", func() {
@@ -35,7 +35,7 @@ var _ = Describe("Build Connection Strings", func() {
 				Port:     5432,
 				Database: "database",
 			}
-			result := builder.BuildConnectionString(config)
+			result := postgres.BuildConnectionString(config)
 			Expect(result).To(Equal("postgres://user:password@host:5432/database"))
 		})
 		It("should build without creds", func() {
@@ -44,7 +44,7 @@ var _ = Describe("Build Connection Strings", func() {
 				Port:     5432,
 				Database: "database",
 			}
-			result := builder.BuildConnectionString(config)
+			result := postgres.BuildConnectionString(config)
 			Expect(result).To(Equal("postgres://host:5432/database"))
 		})
 	})

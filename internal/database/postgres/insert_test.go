@@ -1,8 +1,8 @@
-package builder_test
+package postgres_test
 
 import (
 	"fmt"
-	"stage-sync/internal/database/builder"
+	"stage-sync/internal/database/postgres"
 	"stage-sync/models"
 	"testing"
 )
@@ -29,7 +29,7 @@ func TestBuildInsertQuery(t *testing.T) {
 		},
 	}
 
-	query := builder.BuildInsertQuery(tableName, rows[0])
+	query := postgres.BuildInsertQuery(tableName, rows[0])
 	if query != fmt.Sprintf("INSERT INTO %q (\"Age\", \"Id\", \"Name\") VALUES (1.6346346, 1, 'John');", tableName) {
 		t.Errorf("expected 'INSERT INTO %q (\"Age\", \"Id\", \"Name\") VALUES (1.6346346, 1, 'John');', got '%s'", tableName, query)
 	}

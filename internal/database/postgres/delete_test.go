@@ -1,8 +1,8 @@
-package builder_test
+package postgres_test
 
 import (
 	. "github.com/onsi/gomega"
-	"stage-sync/internal/database/builder"
+	"stage-sync/internal/database/postgres"
 	"stage-sync/models"
 	"testing"
 )
@@ -28,7 +28,7 @@ func TestBuildDeleteQuery(t *testing.T) {
 		},
 	}
 
-	query := builder.BuildDeleteQuery(tableName, row)
+	query := postgres.BuildDeleteQuery(tableName, row)
 	Expect(query).To(Equal("DELETE FROM \"users\" WHERE ((\"Id\" = 1) AND (\"Name\" = 'John') AND (\"Age\" = 1.6346346));"))
 
 }

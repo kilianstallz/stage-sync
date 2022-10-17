@@ -1,6 +1,7 @@
-package database
+package builder
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	numeric "github.com/jackc/pgtype/ext/shopspring-numeric"
@@ -8,24 +9,143 @@ import (
 	"go.uber.org/zap"
 	"reflect"
 	"stage-sync/internal/config"
-	"stage-sync/internal/database/builder"
+	"stage-sync/internal/database"
+	"stage-sync/internal/database/postgres"
+	"stage-sync/internal/sql_log"
 	"stage-sync/models"
 	"time"
 )
 
-func QueryTables(config *config.Config, sourceDB *sql.DB) []models.Table {
+type PostgresClient struct {
+	connection *sql.DB
+}
+
+func (p *PostgresClient) NewConnection(credentials config.ConfigDB) error {
+	connString := p.buildConnectionString(credentials)
+	targetDB, err := sql.Open("postgres", connString)
+	if err != nil {
+		panic(err)
+	}
+	p.connection = targetDB
+	return err
+}
+
+func (p *PostgresClient) Close() error {
+	err := p.connection.Close()
+	return err
+}
+
+func (p *PostgresClient) Connection() *sql.DB {
+	return p.connection
+}
+
+func (p *PostgresClient) BeginTx(ctx context.Context, opts *sql.TxOptions) (*sql.Tx, error) {
+	return p.connection.BeginTx(ctx, opts)
+}
+
+func (p *PostgresClient) buildConnectionString(credentials config.ConfigDB) string {
+	return postgres.BuildConnectionString(credentials)
+}
+
+func (p *PostgresClient) BuildDeleteQuery(tableName string, rows models.Row) string {
+	return postgres.BuildDeleteQuery(tableName, rows)
+}
+
+func (p *PostgresClient) BuildInsertQuery(tableName string, row models.Row) string {
+	return postgres.BuildInsertQuery(tableName, row)
+}
+
+func (p *PostgresClient) BuildSelectQuery(table config.ConfigTable) string {
+	return postgres.BuildSelectQuery(table)
+}
+
+func (p *PostgresClient) BuildUpdateQuery(tableName string, changedColumn []string, originalRow models.Row, updatedRow models.Row) string {
+	return postgres.BuildUpdateQuery(tableName, changedColumn, originalRow, updatedRow)
+}
+
+func (p *PostgresClient) InsertRows(ctx context.Context, tx *sql.Tx, tableName string, rows []models.Row, isDryRun bool) error {
+	_, f := sql_log.CreateSqlLogger("insert.sql")
+	defer f.Close()
+
+	for _, row := range rows {
+
+		query := p.BuildInsertQuery(tableName, row)
+
+		if !isDryRun {
+			_, err := tx.ExecContext(ctx, query)
+			if err != nil {
+				panic(err)
+			}
+		}
+	}
+
+	return nil
+}
+
+func (p *PostgresClient) DeleteRows(ctx context.Context, tx *sql.Tx, tableName string, rows []models.Row, isDryRun bool) error {
+	log, f := sql_log.CreateSqlLogger("delete.sql")
+	defer f.Close()
+
+	for _, row := range rows {
+
+		query := p.BuildDeleteQuery(tableName, row)
+		log.Println(query)
+
+		if !isDryRun {
+			_, err := tx.ExecContext(ctx, query)
+			if err != nil {
+				panic(err)
+			}
+		}
+	}
+
+	return nil
+}
+
+func (p *PostgresClient) UpdateRows(ctx context.Context, tx *sql.Tx, tableName string, changedColumns []string, oldRows []models.Row, updatedRows []models.Row, isDryRun bool) error {
+	log, f := sql_log.CreateSqlLogger("update.sql")
+	defer f.Close()
+
+	for i, oldRow := range oldRows {
+
+		query := p.BuildUpdateQuery(tableName, changedColumns, oldRow, updatedRows[i])
+		log.Println(query)
+
+		if !isDryRun {
+			_, err := tx.ExecContext(ctx, query)
+			if err != nil {
+				panic(err)
+			}
+
+		}
+	}
+
+	return nil
+}
+
+func NewPostgresClient(credentials config.ConfigDB) QueryBuilder {
+	var client = PostgresClient{}
+	err := client.NewConnection(credentials)
+	if err != nil {
+		panic(err)
+	}
+	return &client
+}
+
+func (p *PostgresClient) QueryTables(config *config.Config) []models.Table {
 	var tables []models.Table
 	for _, table := range config.Tables {
-		tables = append(tables, buildTable(table, sourceDB))
+		tables = append(tables, p.buildTable(table))
 	}
 
 	return tables
 }
 
-func buildTable(table config.ConfigTable, sourceDB *sql.DB) models.Table {
+func (p *PostgresClient) buildTable(table config.ConfigTable) models.Table {
 	// Get all the data from the source database table
-	q := builder.BuildSelectQuery(table)
-	dbRows, err := sourceDB.Query(q)
+	q := p.BuildSelectQuery(table)
+	// error using the interface implementation because of some type transformation in the background
+	dbRows, err := p.Connection().Query(q)
 	if err != nil {
 		zap.S().Fatal("Error querying database", zap.Error(err))
 	}
@@ -137,7 +257,7 @@ func buildTable(table config.ConfigTable, sourceDB *sql.DB) models.Table {
 
 		row := make([]models.Column, 0, len(table.Columns))
 		for i, column := range table.Columns {
-			val := ConvertDbValue(values[i])
+			val := database.ConvertDbValue(values[i])
 			typ := reflectType(val)
 			row = append(row, models.Column{
 				Name:  column,

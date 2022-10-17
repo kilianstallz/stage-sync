@@ -1,8 +1,8 @@
-package builder_test
+package postgres_test
 
 import (
 	"fmt"
-	"stage-sync/internal/database/builder"
+	"stage-sync/internal/database/postgres"
 	"stage-sync/models"
 	"testing"
 )
@@ -58,7 +58,7 @@ func TestBuildUpdateQuery(t *testing.T) {
 		"Text",
 	}
 
-	query := builder.BuildUpdateQuery(tableName, changedColumns, oldRow, newRow)
+	query := postgres.BuildUpdateQuery(tableName, changedColumns, oldRow, newRow)
 	t.Log(query)
 	if query != fmt.Sprintf("UPDATE %q SET \"Text\"='<html> this is some \"new text\" </html>' WHERE ((\"Id\" = 1) AND (\"Name\" = 'John') AND (\"Age\" = 1.6346346) AND (\"Text\" = '<html> this is some \"text\" </html>'));", tableName) {
 		t.Errorf("UPDATE %q SET \"Text\"='<html> this is some \"new text\" </html>' WHERE ((\"Id\" = 1) AND (\"Name\" = 'John') AND (\"Age\" = 1.6346346) AND (\"Text\" = '<html> this is some \"text\" </html>'));' \n got \n '%s'", tableName, query)

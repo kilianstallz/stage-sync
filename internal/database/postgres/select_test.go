@@ -1,9 +1,9 @@
-package builder_test
+package postgres_test
 
 import (
 	"fmt"
 	"stage-sync/internal/config"
-	"stage-sync/internal/database/builder"
+	"stage-sync/internal/database/postgres"
 	"testing"
 )
 
@@ -34,7 +34,7 @@ func TestBuildSelectQuery(t *testing.T) {
 		},
 	}
 
-	query := builder.BuildSelectQuery(tableConfigs[0])
+	query := postgres.BuildSelectQuery(tableConfigs[0])
 	t.Log(query)
 
 	if query != fmt.Sprintf("SELECT \"Id\", \"Name\", \"Age\" FROM \"table1\" WHERE (\"Id\" IN ('1', '2'));") {
@@ -55,7 +55,7 @@ func Test_SingleSelect(t *testing.T) {
 			},
 		},
 	}
-	query2 := builder.BuildSelectQuery(tableConfigs[0])
+	query2 := postgres.BuildSelectQuery(tableConfigs[0])
 	t.Log(query2)
 
 	if query2 != fmt.Sprintf("SELECT \"Name\", \"Age\" FROM \"table2\";") {
