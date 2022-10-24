@@ -10,7 +10,7 @@ require (
 	github.com/onsi/gomega v1.22.1
 	github.com/samber/lo v1.33.0
 	github.com/shopspring/decimal v1.3.1
-	github.com/spf13/cobra v1.6.0
+	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.13.0
 	go.uber.org/zap v1.23.0
 	gopkg.in/yaml.v3 v3.0.1
