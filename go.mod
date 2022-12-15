@@ -8,7 +8,7 @@ require (
 	github.com/lib/pq v1.10.7
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.22.1
-	github.com/samber/lo v1.33.0
+	github.com/samber/lo v1.37.0
 	github.com/shopspring/decimal v1.3.1
 	github.com/spf13/cobra v1.6.0
 	github.com/spf13/viper v1.13.0
