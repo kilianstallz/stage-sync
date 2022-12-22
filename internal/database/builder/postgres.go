@@ -20,9 +20,8 @@ type PostgresClient struct {
 	connection *sql.DB
 }
 
-func (p *PostgresClient) NewConnection(credentials config.ConfigDB) error {
-	connString := p.buildConnectionString(credentials)
-	targetDB, err := sql.Open("postgres", connString)
+func (p *PostgresClient) NewConnection(credentials string) error {
+	targetDB, err := sql.Open("postgres", credentials)
 	if err != nil {
 		panic(err)
 	}
@@ -41,10 +40,6 @@ func (p *PostgresClient) Connection() *sql.DB {
 
 func (p *PostgresClient) BeginTx(ctx context.Context, opts *sql.TxOptions) (*sql.Tx, error) {
 	return p.connection.BeginTx(ctx, opts)
-}
-
-func (p *PostgresClient) buildConnectionString(credentials config.ConfigDB) string {
-	return postgres.BuildConnectionString(credentials)
 }
 
 func (p *PostgresClient) BuildDeleteQuery(tableName string, rows models.Row) string {
@@ -123,7 +118,7 @@ func (p *PostgresClient) UpdateRows(ctx context.Context, tx *sql.Tx, tableName s
 	return nil
 }
 
-func NewPostgresClient(credentials config.ConfigDB) QueryBuilder {
+func NewPostgresClient(credentials string) QueryBuilder {
 	var client = PostgresClient{}
 	err := client.NewConnection(credentials)
 	if err != nil {

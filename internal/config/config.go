@@ -6,14 +6,9 @@ import (
 )
 
 type Config struct {
-	SourceDatabase DbConnection  `yaml:"sourceDatabase"`
-	TargetDatabase DbConnection  `yaml:"targetDatabase"`
+	SourceDatabase string        `yaml:"sourceDatabase"`
+	TargetDatabase string        `yaml:"targetDatabase"`
 	Tables         []ConfigTable `yaml:"tables"`
-}
-
-type DbConnection struct {
-	Credentials ConfigDB `yaml:"credentials"`
-	Schema      string   `yaml:"schema"`
 }
 
 type ConfigTable struct {
@@ -28,15 +23,6 @@ type ConfigWhere struct {
 	Name  string `yaml:"name"`
 	Type  string `yaml:"type"` // string, bool, int, float, date
 	Value string `yaml:"value"`
-}
-
-type ConfigDB struct {
-	Host     string `yaml:"host"`
-	Port     int    `yaml:"port"`
-	User     string `yaml:"user"`
-	Password string `yaml:"password"`
-	Database string `yaml:"database"`
-	SslMode  string `yaml:"sslMode"`
 }
 
 func ParseConfigFromFile(path string) (*Config, error) {

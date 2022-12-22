@@ -8,7 +8,7 @@ import (
 )
 
 type QueryBuilder interface {
-	NewConnection(credentials config.ConfigDB) error
+	NewConnection(credentials string) error
 	Close() error
 	BeginTx(ctx context.Context, opts *sql.TxOptions) (*sql.Tx, error)
 	Connection() *sql.DB

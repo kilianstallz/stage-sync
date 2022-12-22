@@ -1,9 +1,8 @@
-package propagate
+package propagation
 
 import (
 	"context"
 	"fmt"
-	_ "github.com/lib/pq"
 	"go.uber.org/zap"
 	"stage-sync/internal/config"
 	"stage-sync/internal/database/builder"
@@ -11,18 +10,18 @@ import (
 	"stage-sync/internal/table"
 )
 
-func Run(configPath string, isDryRun bool) {
+func Execute(configPath string, isDryRun bool) {
 	zap.L().Info("Starting propagation")
 	conf, _ := config.ParseConfigFromFile(configPath)
 
 	// Get the source database connection.
-	sourceDB := builder.NewPostgresClient(conf.SourceDatabase.Credentials)
+	sourceDB := builder.NewPostgresClient(conf.SourceDatabase)
 
 	tables := sourceDB.QueryTables(conf)
 	sourceDB.Close()
 
 	// Get the target database connection.
-	targetDB := builder.NewPostgresClient(conf.TargetDatabase.Credentials)
+	targetDB := builder.NewPostgresClient(conf.TargetDatabase)
 
 	targetTables := targetDB.QueryTables(conf)
 

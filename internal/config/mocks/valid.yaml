@@ -1,24 +1,8 @@
 
-targetDatabase:
-  credentials:
-    user: Test
-    password: password
-    database: MFP_DEMO2
-    host: post.database.azure.com
-    port: 5432
-    sslMode: "require"
-  schema: public
+targetDatabase: "postgres://test:tea@sadfaasdf:5432/db?schema=asdf"
 
 
-sourceDatabase:
-  credentials:
-    user: Test
-    password: password
-    database: MFP_DEV2
-    host: post.database.azure.com
-    port: 5432
-    sslMode: "require"
-  schema: public
+sourceDatabase: "postgres://test:tea@sadfaasdf:5432/dbsource?schema=asdf"
 
 tables:
   - name: EquipmentOperatingUnits
