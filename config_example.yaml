@@ -1,20 +1,6 @@
-targetDatabase:
-  credentials:
-    user: root
-    password: root
-    database: test
-    host: localhost
-    port: 5432
-  schema: public
+targetDatabase: "postgres://test:test@test:5432/test"
 
-sourceDatabase:
-  credentials:
-    user: root
-    password: root
-    database: testsource
-    host: localhost
-    port: 5432
-  schema: public
+sourceDatabase: "postgres://test:test@test:5432/testsource"
 
 tables:
   - name: TextTemplates
