@@ -2,7 +2,7 @@
 ROOT                    := $(PWD)
 GO_HTML_COV             := ./coverage.html
 GO_TEST_OUTFILE         := ./c.out
-GOLANG_DOCKER_IMAGE     := golang:1.18
+GOLANG_DOCKER_IMAGE     := golang:1.19
 GOLANG_DOCKER_CONTAINER := test-container
 CC_TEST_REPORTER_ID		:= ${CC_TEST_REPORTER_ID}
 CC_PREFIX				:= stage-sync
