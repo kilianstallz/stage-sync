@@ -6,7 +6,7 @@ before:
     - go mod tidy
 builds:
   - main: ./cmd/stage-sync/stage-sync.go
-  - env:
+    env:
       - CGO_ENABLED=0
     goos:
       - linux
