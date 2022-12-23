@@ -1,9 +1,9 @@
 package main
 
 import (
+	"github.com/kilianstallz/stage-sync/internal/cli/base"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
-	"stage-sync/internal/cli/base"
 )
 
 func main() {

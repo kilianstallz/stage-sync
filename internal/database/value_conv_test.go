@@ -3,7 +3,7 @@ package database_test
 import (
 	"database/sql"
 	"fmt"
-	"stage-sync/internal/database"
+	"github.com/kilianstallz/stage-sync/internal/database"
 	"testing"
 	"time"
 )

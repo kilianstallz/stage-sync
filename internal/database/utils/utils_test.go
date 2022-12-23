@@ -1,7 +1,7 @@
 package utils_test
 
 import (
-	"stage-sync/internal/database/utils"
+	"github.com/kilianstallz/stage-sync/internal/database/utils"
 	"testing"
 )
 

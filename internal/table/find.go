@@ -1,9 +1,9 @@
 package table
 
 import (
+	"github.com/kilianstallz/stage-sync/models"
 	"github.com/samber/lo"
 	"reflect"
-	"stage-sync/models"
 )
 
 func FindTable(tables []models.Table, name string) models.Table {

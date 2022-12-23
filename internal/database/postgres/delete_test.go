@@ -1,9 +1,9 @@
 package postgres_test
 
 import (
+	"github.com/kilianstallz/stage-sync/internal/database/postgres"
+	"github.com/kilianstallz/stage-sync/models"
 	. "github.com/onsi/gomega"
-	"stage-sync/internal/database/postgres"
-	"stage-sync/models"
 	"testing"
 )
 

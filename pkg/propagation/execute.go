@@ -3,11 +3,11 @@ package propagation
 import (
 	"context"
 	"fmt"
+	"github.com/kilianstallz/stage-sync/internal/database/builder"
+	"github.com/kilianstallz/stage-sync/internal/diff"
+	"github.com/kilianstallz/stage-sync/internal/table"
+	"github.com/kilianstallz/stage-sync/pkg/config"
 	"go.uber.org/zap"
-	"stage-sync/internal/config"
-	"stage-sync/internal/database/builder"
-	"stage-sync/internal/diff"
-	"stage-sync/internal/table"
 )
 
 func Execute(configPath string, isDryRun bool) {

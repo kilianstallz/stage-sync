@@ -1,8 +1,8 @@
 package config_test
 
 import (
+	"github.com/kilianstallz/stage-sync/pkg/config"
 	. "github.com/onsi/gomega"
-	"stage-sync/internal/config"
 	"testing"
 )
 

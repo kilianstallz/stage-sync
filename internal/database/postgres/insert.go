@@ -2,9 +2,9 @@ package postgres
 
 import (
 	"github.com/doug-martin/goqu/v9"
+	"github.com/kilianstallz/stage-sync/models"
 	"github.com/samber/lo"
 	"go.uber.org/zap"
-	"stage-sync/models"
 )
 
 // BuildInsertQuery builds an insert query from the given parameters

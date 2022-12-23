@@ -2,8 +2,8 @@ package postgres
 
 import (
 	"github.com/doug-martin/goqu/v9"
+	"github.com/kilianstallz/stage-sync/models"
 	"go.uber.org/zap"
-	"stage-sync/models"
 )
 
 // BuildDeleteQuery builds an delete query from the given parameters

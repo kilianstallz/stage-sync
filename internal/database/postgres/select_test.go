@@ -2,8 +2,8 @@ package postgres_test
 
 import (
 	"fmt"
-	"stage-sync/internal/config"
-	"stage-sync/internal/database/postgres"
+	"github.com/kilianstallz/stage-sync/internal/database/postgres"
+	"github.com/kilianstallz/stage-sync/pkg/config"
 	"testing"
 )
 

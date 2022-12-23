@@ -2,7 +2,7 @@ package builder
 
 import (
 	"fmt"
-	"stage-sync/internal/constants"
+	"github.com/kilianstallz/stage-sync/internal/constants"
 )
 
 type ConnectionStringStrategy interface {

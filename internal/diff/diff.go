@@ -1,10 +1,10 @@
 package diff
 
 import (
+	"github.com/kilianstallz/stage-sync/internal/table"
+	"github.com/kilianstallz/stage-sync/models"
 	"github.com/samber/lo"
 	"go.uber.org/zap"
-	"stage-sync/internal/table"
-	"stage-sync/models"
 )
 
 func FindDiffResult(source models.Table, target models.Table) models.DiffResult {

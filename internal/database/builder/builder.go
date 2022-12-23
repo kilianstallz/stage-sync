@@ -3,8 +3,8 @@ package builder
 import (
 	"context"
 	"database/sql"
-	"stage-sync/internal/config"
-	"stage-sync/models"
+	"github.com/kilianstallz/stage-sync/models"
+	"github.com/kilianstallz/stage-sync/pkg/config"
 )
 
 type QueryBuilder interface {

@@ -2,10 +2,10 @@ package base
 
 import (
 	"fmt"
+	"github.com/kilianstallz/stage-sync/internal"
+	"github.com/kilianstallz/stage-sync/pkg/propagation"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
-	"stage-sync/internal"
-	"stage-sync/pkg/propagation"
 )
 
 func InitCmd() *cobra.Command {

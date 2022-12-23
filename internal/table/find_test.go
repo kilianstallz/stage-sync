@@ -1,7 +1,7 @@
 package table
 
 import (
-	"stage-sync/models"
+	"github.com/kilianstallz/stage-sync/models"
 	"testing"
 )
 
