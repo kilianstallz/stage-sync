@@ -5,3 +5,5 @@ commit:
 release:
 	@sh ./scripts/release.sh
 
+test:
+	@go test ./...
