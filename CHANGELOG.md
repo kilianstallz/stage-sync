@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.6](https://github.com/kilianstallz/stage-sync/compare/v1.2.5...v1.2.6) (2022-12-23)
+
+
+### Bug Fixes
+
+* release path ([33aaa3c](https://github.com/kilianstallz/stage-sync/commit/33aaa3c7435c6f7f6972ee857aeb5f3ec6355e4d))
+* update example ([5fac854](https://github.com/kilianstallz/stage-sync/commit/5fac8544e2bfb00da11202cf06a70b1a1b0f837e))
+
 ### [1.2.5](https://github.com/kilianstallz/stage-sync/compare/v1.2.4...v1.2.5) (2022-12-23)
 
 
