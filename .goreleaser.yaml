@@ -5,7 +5,7 @@ before:
     # You may remove this if you don't use go modules.
     - go mod tidy
 builds:
-  - main: ./cmd/stage-sync
+  - main: ./cmd/stage-sync/stage-sync.go
   - env:
       - CGO_ENABLED=0
     goos:
