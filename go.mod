@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/doug-martin/goqu/v9 v9.18.0
-	github.com/jackc/pgtype v1.13.0
+	github.com/jackc/pgtype v1.14.0
 	github.com/onsi/gomega v1.22.1
 	github.com/samber/lo v1.37.0
 	github.com/shopspring/decimal v1.3.1
