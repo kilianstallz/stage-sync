@@ -21,5 +21,5 @@ type QueryBuilder interface {
 	InsertRows(ctx context.Context, tx *sql.Tx, tableName string, rows []models.Row, isDryRun bool) error
 	UpdateRows(ctx context.Context, tx *sql.Tx, tableName string, changedColumns []string, oldRows []models.Row, updatedRows []models.Row, isDryRun bool) error
 	DeleteRows(ctx context.Context, tx *sql.Tx, tableName string, rows []models.Row, isDryRun bool) error
-	QueryTables(config *config.Config) []models.Table
+	QueryTables(config *config.Config) (tables []models.Table, err error)
 }

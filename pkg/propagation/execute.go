@@ -10,20 +10,38 @@ import (
 	"go.uber.org/zap"
 )
 
-func Execute(configPath string, isDryRun bool) {
+func Execute(configPath string, execute bool, source string, target string) error {
 	zap.L().Info("Starting propagation")
 	conf, _ := config.ParseConfigFromFile(configPath)
 
-	// Get the source database connection.
-	sourceDB := builder.NewPostgresClient(conf.SourceDatabase)
+	sourceDatabase, ok := conf.Stages[source]
+	targetDatabase, tok := conf.Stages[target]
 
-	tables := sourceDB.QueryTables(conf)
-	sourceDB.Close()
+	if !ok {
+		zap.S().Fatal("Source stage not found in config")
+	}
+
+	if !tok {
+		zap.S().Fatal("Target stage not found in config")
+	}
+
+	// Get the source database connection.
+	sourceDB := builder.NewPostgresClient(sourceDatabase)
+	defer sourceDB.Close()
+
+	tables, err := sourceDB.QueryTables(conf)
+	if err != nil {
+		return err
+	}
 
 	// Get the target database connection.
-	targetDB := builder.NewPostgresClient(conf.TargetDatabase)
+	targetDB := builder.NewPostgresClient(targetDatabase)
+	defer targetDB.Close()
 
-	targetTables := targetDB.QueryTables(conf)
+	targetTables, err := targetDB.QueryTables(conf)
+	if err != nil {
+		return err
+	}
 
 	defer func(targetDB builder.QueryBuilder) {
 		err := targetDB.Close()
@@ -36,7 +54,7 @@ func Execute(configPath string, isDryRun bool) {
 
 	tx, err := targetDB.BeginTx(ctx, nil)
 	if err != nil {
-		return
+		return nil
 	}
 	defer tx.Rollback()
 
@@ -68,59 +86,60 @@ func Execute(configPath string, isDryRun bool) {
 		}
 
 		if len(diffResult.AddedRows) > 0 {
-			err := targetDB.InsertRows(ctx, tx, targetTable.Name, diffResult.AddedRows, isDryRun)
+			err := targetDB.InsertRows(ctx, tx, targetTable.Name, diffResult.AddedRows, !execute)
 			if err != nil {
 				zap.L().Error("Error inserting rows ", zap.Error(err))
-				return
+				return err
 			}
-			zap.L().Info(fmt.Sprintf("Insert done on Table: %s", ftable.Name))
+			zap.L().Debug(fmt.Sprintf("Insert done on Table: %s", ftable.Name))
 
 		}
 
 		if len(diffResult.DeletedRows) > 0 {
 			if ftable.NoDelete {
-				zap.L().Info(fmt.Sprintf("No delete on Table: %s", ftable.Name))
+				zap.L().Debug(fmt.Sprintf("No delete on Table: %s", ftable.Name))
 			} else {
 				// delete the deleted rows
-				err := targetDB.DeleteRows(ctx, tx, targetTable.Name, diffResult.DeletedRows, isDryRun)
+				err := targetDB.DeleteRows(ctx, tx, targetTable.Name, diffResult.DeletedRows, !execute)
 				if err != nil {
 					zap.L().Error("Error deleting rows ", zap.Error(err))
-					return
+					return err
 				}
 
-				zap.L().Info(fmt.Sprintf("Delete done on Table: %s", ftable.Name))
+				zap.L().Debug(fmt.Sprintf("Delete done on Table: %s", ftable.Name))
 			}
 		}
 
 		if len(diffResult.UpdatedRows.ChangedColumns) > 0 {
 			// update the updated rows
-			err = targetDB.UpdateRows(ctx, tx, targetTable.Name, diffResult.UpdatedRows.ChangedColumns, diffResult.UpdatedRows.Before, diffResult.UpdatedRows.After, isDryRun)
+			err = targetDB.UpdateRows(ctx, tx, targetTable.Name, diffResult.UpdatedRows.ChangedColumns, diffResult.UpdatedRows.Before, diffResult.UpdatedRows.After, !execute)
 			if err != nil {
 				zap.S().Error("Error updating rows ", zap.Error(err))
-				return
+				return err
 			}
 			zap.L().Info(fmt.Sprintf("Update done on Table: %s", ftable.Name))
 		}
 	}
 
-	if !isDryRun {
+	if execute {
 		// commit the transaction
 		err = tx.Commit()
 		if err != nil {
 			err := tx.Rollback()
 			if err != nil {
 				zap.S().Error("Failed to rollback transaction", zap.Error(err))
-				return
+				return err
 			}
 			zap.S().Error("Failed to commit transaction", zap.Error(err))
-			return
+			return err
 		}
 	} else {
 		zap.L().Info("Dry run, skipping transaction commit")
 		err = tx.Rollback()
 		if err != nil {
 			zap.S().Error("Failed to rollback transaction", zap.Error(err))
-			return
+			return err
 		}
 	}
+	return nil
 }

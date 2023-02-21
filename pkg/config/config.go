@@ -6,9 +6,10 @@ import (
 )
 
 type Config struct {
-	SourceDatabase string        `yaml:"sourceDatabase"`
-	TargetDatabase string        `yaml:"targetDatabase"`
-	Tables         []ConfigTable `yaml:"tables"`
+	SourceDatabase string            `yaml:"sourceDatabase"`
+	TargetDatabase string            `yaml:"targetDatabase"`
+	Stages         map[string]string `yaml:"stages"`
+	Tables         []ConfigTable     `yaml:"tables"`
 }
 
 type ConfigTable struct {

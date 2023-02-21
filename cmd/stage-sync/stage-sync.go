@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/kilianstallz/stage-sync/internal/cli/base"
+	_ "github.com/lib/pq"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 )

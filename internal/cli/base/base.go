@@ -10,7 +10,9 @@ import (
 
 func InitCmd() *cobra.Command {
 	var scriptFilePath, logLevel string
-	var dryRun bool
+	var execute bool
+	var source string
+	var target string
 
 	cmd := &cobra.Command{
 		Use:   "run",
@@ -21,16 +23,20 @@ func InitCmd() *cobra.Command {
 			defer logger.Sync()
 			zap.ReplaceGlobals(logger)
 
-			if !dryRun {
+			if !execute {
 				zap.L().Info("DRY RUN: not inserting into database")
 			}
-			propagation.Execute(scriptFilePath, !dryRun)
+
+			err := propagation.Execute(scriptFilePath, execute, source, target)
+			cobra.CheckErr(err)
 		},
 	}
 
 	cmd.PersistentFlags().StringVarP(&scriptFilePath, "script", "s", "", "path to script file")
 	cmd.PersistentFlags().StringVarP(&logLevel, "level", "l", "debug", "configure the minimal level of log output")
-	cmd.PersistentFlags().BoolVarP(&dryRun, "confirm", "c", false, "Execute propagation without dry run")
+	cmd.PersistentFlags().BoolVarP(&execute, "confirm", "c", false, "Execute propagation without dry run")
+	cmd.PersistentFlags().StringVar(&source, "source", "", "The source database stage")
+	cmd.PersistentFlags().StringVar(&target, "target", "", "The target database stage")
 	cmd.MarkPersistentFlagRequired("script")
 
 	return cmd

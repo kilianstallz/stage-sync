@@ -1,0 +1,22 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="DryRun DEV/DEMO" type="GoApplicationRunConfiguration" factoryName="Go Application">
+    <module name="stage-sync-cli" />
+    <working_directory value="$PROJECT_DIR$" />
+    <parameters value="run -s ./script.yaml --source DEV --target DEMO" />
+    <EXTENSION ID="net.ashald.envfile">
+      <option name="IS_ENABLED" value="false" />
+      <option name="IS_SUBST" value="false" />
+      <option name="IS_PATH_MACRO_SUPPORTED" value="false" />
+      <option name="IS_IGNORE_MISSING_FILES" value="false" />
+      <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+      <ENTRIES>
+        <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
+      </ENTRIES>
+    </EXTENSION>
+    <kind value="PACKAGE" />
+    <package value="github.com/kilianstallz/stage-sync/cmd/stage-sync" />
+    <directory value="$PROJECT_DIR$" />
+    <filePath value="$PROJECT_DIR$/cmd/stage-sync/stage-sync.go" />
+    <method v="2" />
+  </configuration>
+</component>

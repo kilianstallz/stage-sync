@@ -12,6 +12,7 @@ import (
 	"github.com/kilianstallz/stage-sync/pkg/config"
 	"github.com/shopspring/decimal"
 	"go.uber.org/zap"
+	"log"
 	"reflect"
 	"time"
 )
@@ -122,18 +123,19 @@ func NewPostgresClient(credentials string) QueryBuilder {
 	var client = PostgresClient{}
 	err := client.NewConnection(credentials)
 	if err != nil {
-		panic(err)
+		zap.L().Debug("Error connecting to database", zap.Error(err))
+		log.Fatalf("Error connecting to database: %v", err)
 	}
 	return &client
 }
 
-func (p *PostgresClient) QueryTables(config *config.Config) []models.Table {
+func (p *PostgresClient) QueryTables(config *config.Config) ([]models.Table, error) {
 	var tables []models.Table
 	for _, table := range config.Tables {
 		tables = append(tables, p.buildTable(table))
 	}
 
-	return tables
+	return tables, nil
 }
 
 func (p *PostgresClient) buildTable(table config.ConfigTable) models.Table {
