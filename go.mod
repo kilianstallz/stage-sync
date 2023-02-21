@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/doug-martin/goqu/v9 v9.18.0
 	github.com/jackc/pgtype v1.14.0
+	github.com/lib/pq v1.10.7
 	github.com/onsi/gomega v1.22.1
 	github.com/samber/lo v1.37.0
 	github.com/shopspring/decimal v1.3.1
@@ -19,7 +20,6 @@ require (
 	github.com/jackc/pgio v1.0.0 // indirect
 	github.com/jackc/pgx/v4 v4.15.0 // indirect
 	github.com/kr/pretty v0.3.0 // indirect
-	github.com/lib/pq v1.10.7 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
