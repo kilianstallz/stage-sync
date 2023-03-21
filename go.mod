@@ -7,7 +7,7 @@ require (
 	github.com/jackc/pgtype v1.14.0
 	github.com/lib/pq v1.10.7
 	github.com/onsi/gomega v1.22.1
-	github.com/samber/lo v1.37.0
+	github.com/samber/lo v1.38.1
 	github.com/shopspring/decimal v1.3.1
 	github.com/spf13/cobra v1.6.1
 	go.uber.org/zap v1.24.0
