@@ -8,8 +8,8 @@ import (
 	"github.com/kilianstallz/stage-sync/internal/database"
 	"github.com/kilianstallz/stage-sync/internal/database/postgres"
 	"github.com/kilianstallz/stage-sync/internal/sql_log"
-	"github.com/kilianstallz/stage-sync/models"
 	"github.com/kilianstallz/stage-sync/pkg/config"
+	"github.com/kilianstallz/stage-sync/pkg/models"
 	"github.com/shopspring/decimal"
 	"go.uber.org/zap"
 	"log"
@@ -22,7 +22,7 @@ type PostgresClient struct {
 }
 
 func (p *PostgresClient) NewConnection(credentials string) error {
-	targetDB, err := sql.Open("postgres", credentials)
+	targetDB, err := sql.Open("pgx", credentials)
 	if err != nil {
 		panic(err)
 	}
@@ -60,12 +60,13 @@ func (p *PostgresClient) BuildUpdateQuery(tableName string, changedColumn []stri
 }
 
 func (p *PostgresClient) InsertRows(ctx context.Context, tx *sql.Tx, tableName string, rows []models.Row, isDryRun bool) error {
-	_, f := sql_log.CreateSqlLogger("insert.sql")
+	log, f := sql_log.CreateSqlLogger("insert.sql")
 	defer f.Close()
 
 	for _, row := range rows {
 
 		query := p.BuildInsertQuery(tableName, row)
+		log.Println(query)
 
 		if !isDryRun {
 			_, err := tx.ExecContext(ctx, query)

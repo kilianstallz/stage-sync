@@ -2,8 +2,8 @@ package database
 
 import (
 	"fmt"
-	"github.com/kilianstallz/stage-sync/models"
 	"github.com/kilianstallz/stage-sync/pkg/config"
+	"github.com/kilianstallz/stage-sync/pkg/models"
 	"strconv"
 	"strings"
 )

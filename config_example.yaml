@@ -26,3 +26,4 @@ tables:
     primaryKeys:
       - LanguageId
       - LanguageKey
+    noDelete: true

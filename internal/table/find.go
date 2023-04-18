@@ -1,7 +1,7 @@
 package table
 
 import (
-	"github.com/kilianstallz/stage-sync/models"
+	"github.com/kilianstallz/stage-sync/pkg/models"
 	"github.com/samber/lo"
 	"reflect"
 )

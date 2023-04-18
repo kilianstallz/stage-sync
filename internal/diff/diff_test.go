@@ -2,7 +2,7 @@ package diff_test
 
 import (
 	"github.com/kilianstallz/stage-sync/internal/diff"
-	"github.com/kilianstallz/stage-sync/models"
+	"github.com/kilianstallz/stage-sync/pkg/models"
 	"testing"
 )
 

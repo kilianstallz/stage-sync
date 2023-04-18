@@ -2,7 +2,7 @@ package postgres
 
 import (
 	"github.com/doug-martin/goqu/v9"
-	"github.com/kilianstallz/stage-sync/models"
+	"github.com/kilianstallz/stage-sync/pkg/models"
 	"go.uber.org/zap"
 )
 

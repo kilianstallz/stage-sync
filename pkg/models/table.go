@@ -5,7 +5,7 @@ type Table struct {
 	Name        string
 	Rows        []Row
 	PrimaryKeys []string
-	NoDelete bool
+	NoDelete    bool
 }
 
 type Row []Column
