@@ -6,12 +6,12 @@ require (
 	github.com/doug-martin/goqu/v9 v9.18.0
 	github.com/gofiber/fiber/v2 v2.48.0
 	github.com/jackc/pgtype v1.14.0
-	github.com/jackc/pgx/v5 v5.4.2
+	github.com/jackc/pgx/v5 v5.4.3
 	github.com/onsi/gomega v1.22.1
 	github.com/samber/lo v1.38.1
 	github.com/shopspring/decimal v1.3.1
 	github.com/spf13/cobra v1.7.0
-	go.uber.org/zap v1.24.0
+	go.uber.org/zap v1.25.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -50,9 +50,9 @@ require (
 	github.com/zclconf/go-cty v1.8.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/crypto v0.11.0 // indirect
-	golang.org/x/exp v0.0.0-20230713183714-613f0c0eb8a1 // indirect
+	golang.org/x/crypto v0.12.0 // indirect
+	golang.org/x/exp v0.0.0-20230807204917-050eac23e9de // indirect
 	golang.org/x/net v0.10.0 // indirect
-	golang.org/x/sys v0.10.0 // indirect
-	golang.org/x/text v0.11.0 // indirect
+	golang.org/x/sys v0.11.0 // indirect
+	golang.org/x/text v0.12.0 // indirect
 )
