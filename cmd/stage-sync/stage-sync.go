@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/kilianstallz/stage-sync/internal"
 	"github.com/kilianstallz/stage-sync/internal/cli/base"
@@ -16,7 +15,7 @@ func main() {
 
 	cmd := &cobra.Command{
 		Use:     "stage-sync",
-		Version: fmt.Sprint(internal.Version),
+		Version: internal.Version,
 	}
 
 	cmd.AddCommand(base.InitCmd())

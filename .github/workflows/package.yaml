@@ -13,7 +13,17 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: '>=1.20'
+
       - run: make test
+        name: Run go test
+
+      - name: Run "securego/gosec" for security checks
+        run: go run github.com/securego/gosec/v2/cmd/gosec@latest -quiet ./...
+
+      - name: Run "go-critic/go-critic" for code linting
+        run: go run github.com/go-critic/go-critic/cmd/gocritic@latest check -enableAll ./...
+
+
   release:
     runs-on: ubuntu-latest
     needs: build

@@ -159,7 +159,6 @@ func (p *PostgresClient) buildTable(table config.ConfigTable) models.Table {
 
 	// iterate over the rows
 	for dbRows.Next() {
-		// rows := make([]models.Column, 0, len(columns))
 		cols, _ := dbRows.ColumnTypes()
 		pointerValues := make([]interface{}, len(cols))
 		object := map[string]interface{}{}

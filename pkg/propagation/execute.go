@@ -10,7 +10,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func Execute(configPath string, execute bool, source string, target string) error {
+func Execute(configPath string, execute bool, source, target string) error {
 	zap.L().Info("Starting propagation")
 	conf, _ := config.ParseConfigFromFile(configPath)
 

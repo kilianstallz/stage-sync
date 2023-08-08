@@ -8,49 +8,49 @@ import (
 )
 
 func ConvertDbValue(v interface{}) interface{} {
-	switch v.(type) {
+	switch t := v.(type) {
 	case sql.NullInt64:
-		if v.(sql.NullInt64).Valid {
-			return v.(sql.NullInt64).Int64
+		if t.Valid {
+			return t.Int64
 		}
 		return nil
 	case sql.NullFloat64:
-		if v.(sql.NullFloat64).Valid {
-			return v.(sql.NullFloat64).Float64
+		if t.Valid {
+			return t.Float64
 		}
 		return nil
 	case sql.NullString:
-		if v.(sql.NullString).Valid {
-			return v.(sql.NullString).String
+		if t.Valid {
+			return t.String
 		}
 		return nil
 	case sql.NullBool:
-		if v.(sql.NullBool).Valid {
-			return v.(sql.NullBool).Bool
+		if t.Valid {
+			return t.Bool
 		}
 		return nil
 	case sql.NullByte:
-		if v.(sql.NullByte).Valid {
-			return v.(sql.NullByte).Byte
+		if t.Valid {
+			return t.Byte
 		}
 		return nil
 	case sql.NullTime:
-		if v.(sql.NullTime).Valid {
-			return v.(sql.NullTime).Time
+		if t.Valid {
+			return t.Time
 		}
 		return nil
 	case numeric.Numeric:
-		v, err := v.(numeric.Numeric).Value()
+		v, err := t.Value()
 		if err != nil {
 			zap.S().Errorw("Error converting numeric value", "error", err)
 			return nil
 		}
 		return v
 	case decimal.NullDecimal:
-		if v.(decimal.NullDecimal).Valid {
-			return v.(decimal.NullDecimal).Decimal
+		if t.Valid {
+			return t.Decimal
 		}
-		v, err := v.(decimal.NullDecimal).Value()
+		v, err := t.Value()
 		if err != nil {
 			zap.S().Errorw("Error converting numeric value", "error", err)
 			return nil
