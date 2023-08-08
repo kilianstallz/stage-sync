@@ -3,6 +3,7 @@ package config
 import (
 	"gopkg.in/yaml.v3"
 	"os"
+	"path/filepath"
 )
 
 type Config struct {
@@ -28,7 +29,8 @@ type ConfigWhere struct {
 
 func ParseConfigFromFile(path string) (*Config, error) {
 	// Read file from path
-	f, err := os.ReadFile(path)
+
+	f, err := os.ReadFile(filepath.Clean(path))
 	if err != nil {
 		return nil, err
 	}
