@@ -1,6 +1,10 @@
 
 commit:
-	@cz
+	@cz commit
+
+bump:
+	@cz bump -at
+	@git push --follow-tags origin main
 
 test:
 	@go test -race ./...
