@@ -1,9 +1,6 @@
 
 commit:
-	@npx git-cz
-
-release:
-	@sh ./scripts/release.sh
+	@cz
 
 test:
-	@go test ./...
+	@go test -race ./...

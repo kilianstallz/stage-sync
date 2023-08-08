@@ -3,9 +3,12 @@
 before:
   hooks:
     # You may remove this if you don't use go modules.
+    - go mod download
     - go mod tidy
+
 builds:
-  - main: ./cmd/stage-sync/stage-sync.go
+  - id: default
+    main: ./cmd/stage-sync/stage-sync.go
     env:
       - CGO_ENABLED=0
     goos:
@@ -13,13 +16,24 @@ builds:
       - windows
       - darwin
     ldflags:
-      - -s -w
+      - -s -w -X github.com/kilianstallz/stage-sync/internal.Version={{.Version}}
 
 universal_binaries:
   - replace: true
 
 release:
+  ids:
+    - default
+  draft: true
+  replace_existing_draft: true
+  target_commitish: "{{ .Commit }}"
   prerelease: auto
+  mode: replace
+  header: |
+    ## ⚙️ The `{{ .Tag }}` release
+  disable: false
+  skip_upload: false
+
 checksum:
   name_template: 'checksums.txt'
 snapshot:
@@ -30,3 +44,5 @@ changelog:
     exclude:
       - '^docs:'
       - '^test:'
+      - "^*.md"
+      - "^*.ya?ml"

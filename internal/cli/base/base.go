@@ -44,7 +44,8 @@ func InitCmd() *cobra.Command {
 
 func VersionCmd() *cobra.Command {
 	var versionCmd = &cobra.Command{
-		Use:   "version",
+		Use: "version",
+
 		Short: "Print the version number",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println(internal.Version)
