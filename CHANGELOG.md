@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v1.3.1 (2023-08-08)
+
+### Refactor
+
+- refactor linting errors and cleanup
+
 ## [1.3.0](https://github.com/kilianstallz/stage-sync/compare/v1.2.2...v1.3.0) (2023-02-21)
 
 
