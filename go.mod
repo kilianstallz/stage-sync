@@ -3,10 +3,11 @@ module github.com/kilianstallz/stage-sync
 go 1.20
 
 require (
+	ariga.io/atlas v0.12.0
 	github.com/doug-martin/goqu/v9 v9.18.0
 	github.com/gofiber/fiber/v2 v2.48.0
 	github.com/jackc/pgtype v1.14.0
-	github.com/jackc/pgx/v5 v5.4.2
+	github.com/jackc/pgx/v5 v5.4.3
 	github.com/onsi/gomega v1.22.1
 	github.com/samber/lo v1.38.1
 	github.com/shopspring/decimal v1.3.1
@@ -16,7 +17,6 @@ require (
 )
 
 require (
-	ariga.io/atlas v0.12.0 // indirect
 	github.com/agext/levenshtein v1.2.1 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
