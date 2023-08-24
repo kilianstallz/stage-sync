@@ -1,8 +1,6 @@
 package base
 
 import (
-	"fmt"
-	"github.com/kilianstallz/stage-sync/internal"
 	"github.com/kilianstallz/stage-sync/pkg/propagation"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
@@ -40,17 +38,4 @@ func InitCmd() *cobra.Command {
 	cmd.MarkPersistentFlagRequired("script")
 
 	return cmd
-}
-
-func VersionCmd() *cobra.Command {
-	var versionCmd = &cobra.Command{
-		Use: "version",
-
-		Short: "Print the version number",
-		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(internal.Version)
-		},
-	}
-
-	return versionCmd
 }
