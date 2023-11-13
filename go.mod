@@ -10,7 +10,7 @@ require (
 	github.com/onsi/gomega v1.22.1
 	github.com/samber/lo v1.38.1
 	github.com/shopspring/decimal v1.3.1
-	github.com/spf13/cobra v1.7.0
+	github.com/spf13/cobra v1.8.0
 	github.com/stretchr/testify v1.8.4
 	github.com/testcontainers/testcontainers-go v0.23.0
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.23.0
