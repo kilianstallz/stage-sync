@@ -1,6 +1,10 @@
-targetDatabase: "postgres://test:test@test:5432/test"
+sourceDatabase: DEV
+targetDatabase: QA
 
-sourceDatabase: "postgres://test:test@test:5432/testsource"
+stages:
+  DEV: "postgres://test:test@test:5432/testsource"
+  QA: "postgres://test:test@test:5432/testsource"
+  PROD: "postgres://test:test@test:5432/testsource"
 
 tables:
   - name: TextTemplates

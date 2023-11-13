@@ -1,14 +1,15 @@
 package config
 
 import (
-	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
+
+	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
-	SourceDatabase string            `yaml:"sourceDatabase"`
-	TargetDatabase string            `yaml:"targetDatabase"`
+	SourceDatabase string            `yaml:"defaultSource"`
+	TargetDatabase string            `yaml:"defaultTarget"`
 	Stages         map[string]string `yaml:"stages"`
 	Tables         []ConfigTable     `yaml:"tables"`
 }
