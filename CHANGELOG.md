@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v1.3.12 (2023-11-13)
+
+### Fix
+
+- **deps**: update module github.com/testcontainers/testcontainers-go/modules/postgres to v0.26.0
+
 ## v1.3.11 (2023-11-13)
 
 ## v1.3.10 (2023-11-13)
