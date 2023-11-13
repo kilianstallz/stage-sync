@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v1.3.6 (2023-11-13)
+
+### Refactor
+
+- improve performance and refactor
+- connector refactor
+
 ## v1.3.5 (2023-08-08)
 
 ### Perf
