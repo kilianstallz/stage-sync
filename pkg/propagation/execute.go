@@ -34,6 +34,11 @@ func Execute(configPath string, execute bool, source, target string) error {
 		return err
 	}
 
+	err = sourceDB.Close()
+	if err != nil {
+		zap.S().Error("Failed to close source database connection", zap.Error(err))
+	}
+
 	// Get the target database connection.
 	targetDB := builder.NewPostgresClient(targetDatabase)
 	defer targetDB.Close()

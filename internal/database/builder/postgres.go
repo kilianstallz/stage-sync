@@ -4,6 +4,10 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log"
+	"reflect"
+	"time"
+
 	numeric "github.com/jackc/pgtype/ext/shopspring-numeric"
 	"github.com/kilianstallz/stage-sync/internal/database"
 	"github.com/kilianstallz/stage-sync/internal/database/postgres"
@@ -12,9 +16,6 @@ import (
 	"github.com/kilianstallz/stage-sync/pkg/models"
 	"github.com/shopspring/decimal"
 	"go.uber.org/zap"
-	"log"
-	"reflect"
-	"time"
 )
 
 type PostgresClient struct {
@@ -133,13 +134,13 @@ func NewPostgresClient(credentials string) QueryBuilder {
 func (p *PostgresClient) QueryTables(config *config.Config) ([]models.Table, error) {
 	var tables []models.Table
 	for _, table := range config.Tables {
-		tables = append(tables, p.buildTable(table))
+		tables = append(tables, p.BuildTable(table))
 	}
 
 	return tables, nil
 }
 
-func (p *PostgresClient) buildTable(table config.ConfigTable) models.Table {
+func (p *PostgresClient) BuildTable(table config.ConfigTable) models.Table {
 	// Get all the data from the source database table
 	q := p.BuildSelectQuery(table)
 	// error using the interface implementation because of some type transformation in the background
@@ -161,84 +162,13 @@ func (p *PostgresClient) buildTable(table config.ConfigTable) models.Table {
 	for dbRows.Next() {
 		cols, _ := dbRows.ColumnTypes()
 		pointerValues := make([]interface{}, len(cols))
-		object := map[string]interface{}{}
 		for i, column := range cols {
 			typeName := column.DatabaseTypeName()
 			isNullable := true
-			switch typeName {
-			case "INT":
-				if isNullable {
-					pointerValues[i] = new(sql.NullInt64)
-					object[column.Name()] = new(sql.NullInt64)
-				} else {
-					pointerValues[i] = new(int)
-					object[column.Name()] = new(int)
-				}
-			case "VARCHAR":
-				if isNullable {
-					pointerValues[i] = new(sql.NullString)
-					object[column.Name()] = new(sql.NullString)
-				} else {
-					pointerValues[i] = new(string)
-					object[column.Name()] = new(string)
-				}
-			case "DATETIME":
-				if isNullable {
-					pointerValues[i] = new(sql.NullTime)
-					object[column.Name()] = new(sql.NullTime)
-				} else {
-					pointerValues[i] = new(time.Time)
-					object[column.Name()] = new(time.Time)
-				}
-			case "NUMERIC":
-				pointerValues[i] = new(numeric.Numeric)
-				object[column.Name()] = new(numeric.Numeric)
-			case "DECIMAL":
-				pointerValues[i] = new(decimal.NullDecimal)
-				object[column.Name()] = new(decimal.NullDecimal)
-			case "TEXT":
-				if isNullable {
-					pointerValues[i] = new(sql.NullString)
-					object[column.Name()] = new(sql.NullString)
-				} else {
-					pointerValues[i] = new(string)
-					object[column.Name()] = new(string)
-				}
-			case "BOOL":
-				if isNullable {
-					pointerValues[i] = new(sql.NullBool)
-					object[column.Name()] = new(sql.NullBool)
-				} else {
-					pointerValues[i] = new(bool)
-					object[column.Name()] = new(bool)
-				}
-			case "DATE":
-				if isNullable {
-					pointerValues[i] = new(sql.NullTime)
-					object[column.Name()] = new(sql.NullTime)
-				} else {
-					pointerValues[i] = new(time.Time)
-					object[column.Name()] = new(time.Time)
-				}
-			case "INT4":
-				if isNullable {
-					pointerValues[i] = new(sql.NullInt64)
-					object[column.Name()] = new(sql.NullInt64)
-				} else {
-					pointerValues[i] = new(int)
-					object[column.Name()] = new(int)
-				}
-
-			case "TIMESTAMP":
-				if isNullable {
-					pointerValues[i] = new(sql.NullTime)
-					object[column.Name()] = new(sql.NullTime)
-				} else {
-					pointerValues[i] = new(time.Time)
-					object[column.Name()] = new(time.Time)
-				}
-			default:
-				panic(fmt.Sprintf("Unsupported type: %s", typeName))
+			if handler, ok := typeHandlers[typeName]; ok {
+				pointerValues[i] = handler(isNullable)
+			} else {
+				panic(fmt.Sprintf("No handler for type %s", typeName))
 			}
 		}
 		err := dbRows.Scan(pointerValues...)
@@ -273,4 +203,73 @@ func reflectType(v interface{}) string {
 		return "NULL"
 	}
 	return reflect.TypeOf(v).String()
+}
+
+var typeHandlers = map[string]func(isNullable bool) interface{}{
+	"INT": func(isNullable bool) interface{} {
+		if isNullable {
+			return new(sql.NullInt64)
+		} else {
+			return new(int)
+		}
+	},
+	"VARCHAR": func(isNullable bool) interface{} {
+		if isNullable {
+			return new(sql.NullString)
+		} else {
+			return new(string)
+		}
+	},
+	"DATETIME": func(isNullable bool) interface{} {
+		if isNullable {
+			return new(sql.NullTime)
+		} else {
+			return new(time.Time)
+		}
+	},
+	"NUMERIC": func(isNullable bool) interface{} {
+		return new(numeric.Numeric)
+	},
+	"DECIMAL": func(isNullable bool) interface{} {
+		if isNullable {
+			return new(decimal.NullDecimal)
+		} else {
+			return new(decimal.Decimal)
+		}
+	},
+	"TEXT": func(isNullable bool) interface{} {
+		if isNullable {
+			return new(sql.NullString)
+		} else {
+			return new(string)
+		}
+	},
+	"BOOL": func(isNullable bool) interface{} {
+		if isNullable {
+			return new(sql.NullBool)
+		} else {
+			return new(bool)
+		}
+	},
+	"DATE": func(isNullable bool) interface{} {
+		if isNullable {
+			return new(sql.NullTime)
+		} else {
+			return new(time.Time)
+		}
+	},
+	"INT4": func(isNullable bool) interface{} {
+		if isNullable {
+			return new(sql.NullInt64)
+		} else {
+			return new(int)
+		}
+	},
+	"TIMESTAMP": func(isNullable bool) interface{} {
+		if isNullable {
+			return new(sql.NullTime)
+		} else {
+			return new(time.Time)
+		}
+	},
 }

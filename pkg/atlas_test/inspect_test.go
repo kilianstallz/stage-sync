@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func LocalTestInspect(t *testing.T) {
+func Test_LocalTestInspect(t *testing.T) {
 
 	ctx := context.Background()
 

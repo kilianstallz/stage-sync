@@ -3,6 +3,7 @@ package builder
 import (
 	"context"
 	"database/sql"
+
 	"github.com/kilianstallz/stage-sync/pkg/config"
 	"github.com/kilianstallz/stage-sync/pkg/models"
 )
@@ -22,4 +23,5 @@ type QueryBuilder interface {
 	UpdateRows(ctx context.Context, tx *sql.Tx, tableName string, changedColumns []string, oldRows []models.Row, updatedRows []models.Row, isDryRun bool) error
 	DeleteRows(ctx context.Context, tx *sql.Tx, tableName string, rows []models.Row, isDryRun bool) error
 	QueryTables(config *config.Config) (tables []models.Table, err error)
+	BuildTable(table config.ConfigTable) models.Table
 }

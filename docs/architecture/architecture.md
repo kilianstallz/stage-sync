@@ -1,5 +1,13 @@
 # Architecture New
 
+## MVP Specs
+
+- [ ] Compare two tables with the same schema based on config file using atlas (go API)
+- [ ] Sync two tables with the same schema based on config file (go API)
+- [ ] Provide a dryRun option to preview the changes
+- [ ] Log all sql statements to a file in debug mode
+
+
 ```mermaid
 ---
 title: Adapter Architecture
