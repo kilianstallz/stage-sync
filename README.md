@@ -20,7 +20,29 @@ It's a powerful tool for managing data propagation across different stages of yo
 
 ## Configuration
 
-Define a new configuration by creating a new `config.yaml` file like in the [Example](/config_example.md).
-Configure tables like in [the Table Description](/docs/table_config.md).
+- Define a new configuration by creating a new `config.yaml` file like in the [Example](/config_example.md).
+- Configure tables like in [the Table Description](/docs/table_config.md).
 
+## Execute
+
+```sh
+stage-sync run -s [config.yaml] --source [SOURCE_STAGE] --target [TARGET_STAGE] -c
+```
+
+Look at **stage-sync run -h** for help.
+
+**-s**
+Configuration File Path
+
+**--source/target**
+Source and target stage selection
+
+**-c**
+Confirm Flag. If not set, task is executed as dry-run.
+
+
+# Drawbacks / ToDos
+
+- Currently only supporting PostgreSQL
+- There may be issues updating referenced id's.
 
