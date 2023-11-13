@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v1.3.9 (2023-11-13)
+
+### Perf
+
+- bumped versions
+
 ## v1.3.8 (2023-11-13)
 
 ### Perf
