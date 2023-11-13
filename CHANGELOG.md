@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v1.3.10 (2023-11-13)
+
+### Fix
+
+- **deps**: update module github.com/onsi/gomega to v1.30.0
+
+### Perf
+
+- bump atlas
+
 ## v1.3.9 (2023-11-13)
 
 ### Perf
