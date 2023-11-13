@@ -1,15 +1,16 @@
 package atlas_test
 
 import (
-	"ariga.io/atlas/sql/postgres"
-	"ariga.io/atlas/sql/schema"
 	"context"
 	"database/sql"
-	_ "github.com/jackc/pgx/v5/stdlib"
 	"testing"
+
+	"ariga.io/atlas/sql/postgres"
+	"ariga.io/atlas/sql/schema"
+	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
-func Test_LocalTestInspect(t *testing.T) {
+func Tes_LocalTestInspect(t *testing.T) {
 
 	ctx := context.Background()
 
