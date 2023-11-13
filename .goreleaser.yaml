@@ -26,7 +26,7 @@ universal_binaries:
 release:
   ids:
     - default
-  draft: true
+  draft: false
   replace_existing_draft: true
   target_commitish: "{{ .Commit }}"
   prerelease: auto
