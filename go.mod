@@ -3,7 +3,7 @@ module github.com/kilianstallz/stage-sync
 go 1.21
 
 require (
-	ariga.io/atlas v0.12.0
+	ariga.io/atlas v0.15.0
 	github.com/doug-martin/goqu/v9 v9.18.0
 	github.com/jackc/pgtype v1.14.0
 	github.com/jackc/pgx/v5 v5.4.3
