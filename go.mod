@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	ariga.io/atlas v0.15.0
-	github.com/doug-martin/goqu/v9 v9.18.0
+	github.com/doug-martin/goqu/v9 v9.19.0
 	github.com/jackc/pgtype v1.14.0
 	github.com/jackc/pgx/v5 v5.5.0
 	github.com/onsi/gomega v1.30.0
