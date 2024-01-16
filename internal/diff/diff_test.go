@@ -132,6 +132,73 @@ func testBasicRowUpdate(t *testing.T) {
 	}
 }
 
+func testRowUpdateWithIntArrayType(t *testing.T) {
+	bTable := models.Table{
+		Name: "Base",
+		PrimaryKeys: []string{
+			"Id",
+		},
+		Rows: []models.Row{
+			[]models.Column{
+				models.Column{
+					Name:  "Id",
+					Type:  "int",
+					Value: "1",
+				},
+				models.Column{
+					Name:  "Name",
+					Type:  "string",
+					Value: "John",
+				},
+				models.Column{
+					Name:  "Verbs",
+					Type:  "int[]",
+					Value: []int{1, 2, 3},
+				},
+			},
+		},
+	}
+
+	dTable := models.Table{
+		Name: "Diff",
+		PrimaryKeys: []string{
+			"Id",
+		},
+		Rows: []models.Row{
+			[]models.Column{
+				models.Column{
+					Name:  "Id",
+					Type:  "int",
+					Value: "1",
+				},
+				models.Column{
+					Name:  "Name",
+					Type:  "string",
+					Value: "John",
+				},
+				models.Column{
+					Name:  "Verbs",
+					Type:  "int[]",
+					Value: []int{1, 2, 4},
+				},
+			},
+		},
+	}
+
+	diffRes := diff.FindDiffResult(bTable, dTable)
+
+	// check if the diff result is correct
+
+	if len(diffRes.UpdatedRows.ChangedColumns) != 1 {
+		t.Errorf("Expected 1 updated row, got %d", len(diffRes.UpdatedRows.ChangedColumns))
+	}
+
+	// changed columns should be "Verbs"
+	if diffRes.UpdatedRows.ChangedColumns[0] != "Verbs" {
+		t.Errorf("Expected changed column to be 'Verbs', got %s", diffRes.UpdatedRows.ChangedColumns[0])
+	}
+}
+
 func testBasicRowDelete(t *testing.T) {
 	bTable := models.Table{
 		Name: "Base",

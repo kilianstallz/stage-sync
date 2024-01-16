@@ -3,7 +3,10 @@ package builder
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
+	"github.com/jackc/pgtype"
+	"github.com/jackc/pgx/v5/pgconn"
 	"log"
 	"reflect"
 	"time"
@@ -14,6 +17,7 @@ import (
 	"github.com/kilianstallz/stage-sync/internal/sql_log"
 	"github.com/kilianstallz/stage-sync/pkg/config"
 	"github.com/kilianstallz/stage-sync/pkg/models"
+	_ "github.com/lib/pq"
 	"github.com/shopspring/decimal"
 	"go.uber.org/zap"
 )
@@ -72,6 +76,29 @@ func (p *PostgresClient) InsertRows(ctx context.Context, tx *sql.Tx, tableName s
 		if !isDryRun {
 			_, err := tx.ExecContext(ctx, query)
 			if err != nil {
+				// check if the error string contains the error code for foreign key constraint violation
+				var pgErr *pgconn.PgError
+				if errors.As(err, &pgErr) {
+					if pgErr.Code == "23503" {
+						zap.S().Debug("Foreign key constraint violation")
+						//zap.S().Debug(pgErr.ColumnName)
+						//// find col where name is ParentId
+						//c := row.GetColumn("ParentId")
+						//// parse value as string
+						//parentId := c.Value.(string)
+						//zap.S().Debug(parentId)
+						//// find row where PK is parentId
+						//for _, r := range rows {
+						//	if r.GetColumn("Id").Value.(string) == parentId {
+						//		q := p.BuildInsertQuery(tableName, r)
+						//		zap.S().Debug(q)
+						//	}
+						//}
+
+						// TODO: Schedule the row for later insertion
+					}
+				}
+
 				panic(err)
 			}
 		}
@@ -166,7 +193,14 @@ func (p *PostgresClient) BuildTable(table config.ConfigTable) models.Table {
 			typeName := column.DatabaseTypeName()
 			isNullable := true
 			if handler, ok := typeHandlers[typeName]; ok {
+				// handler returns a pointer to the actual value
+				// if the type is not nullable, the pointer is not needed
+				// so we dereference it
+				//if typeName == "_INT4" {
+				//	pointerValues[i] = reflect.ValueOf(handler(isNullable)).Elem().Interface()
+				//} else {
 				pointerValues[i] = handler(isNullable)
+				//}
 			} else {
 				panic(fmt.Sprintf("No handler for type %s", typeName))
 			}
@@ -175,8 +209,8 @@ func (p *PostgresClient) BuildTable(table config.ConfigTable) models.Table {
 		if err != nil {
 			panic(err)
 		}
-		// pointer values is an array of pointers to the values
-		// make an array of actual values
+		// pointer values is an array of array of actual valuepointers to the values
+		// make an s
 		values := make([]interface{}, len(pointerValues))
 		for i, pointerValue := range pointerValues {
 			values[i] = reflect.ValueOf(pointerValue).Elem().Interface()
@@ -186,10 +220,12 @@ func (p *PostgresClient) BuildTable(table config.ConfigTable) models.Table {
 		for i, column := range table.Columns {
 			val := database.ConvertDbValue(values[i])
 			typ := reflectType(val)
+			isPK := isInArray(column, table.PrimaryKeys)
 			row = append(row, models.Column{
 				Name:  column,
 				Value: val,
 				Type:  typ,
+				IsPK:  isPK,
 			})
 		}
 		tableStruct.Rows = append(tableStruct.Rows, row)
@@ -272,4 +308,17 @@ var typeHandlers = map[string]func(isNullable bool) interface{}{
 			return new(time.Time)
 		}
 	},
+	// handle _INT4 arrays as []int
+	"_INT4": func(isNullable bool) interface{} {
+		return new(pgtype.Int4Array)
+	},
+}
+
+func isInArray(target string, array []string) bool {
+	for _, element := range array {
+		if element == target {
+			return true
+		}
+	}
+	return false
 }

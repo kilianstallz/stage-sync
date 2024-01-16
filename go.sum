@@ -255,8 +255,6 @@ github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcU
 github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
 github.com/testcontainers/testcontainers-go v0.26.0 h1:uqcYdoOHBy1ca7gKODfBd9uTHVK3a7UL848z09MVZ0c=
 github.com/testcontainers/testcontainers-go v0.26.0/go.mod h1:ICriE9bLX5CLxL9OFQ2N+2N+f+803LNJ1utJb1+Inx0=
-github.com/testcontainers/testcontainers-go/modules/postgres v0.23.0 h1:OEGUC1YTN1RyS4xqsHmlyYkBWm9lMJcswoV4JSHJQOM=
-github.com/testcontainers/testcontainers-go/modules/postgres v0.23.0/go.mod h1:YnqIhPwhjqVbJBuvSRJS6pa9Cy1PDRJcrM6T63Uw2ms=
 github.com/testcontainers/testcontainers-go/modules/postgres v0.26.0 h1:I5UydATCgDjdOjhKy2ztjw3EhzKgug6xsVzmJ129+wQ=
 github.com/testcontainers/testcontainers-go/modules/postgres v0.26.0/go.mod h1:2p5a6shxPWQkSjErw6z5Sq/6DF1lMq7OnBX5R6EQrII=
 github.com/tklauser/go-sysconf v0.3.12 h1:0QaGUFOdQaIVdPgfITYzaTegZvdCjmYO52cSFAEVmqU=

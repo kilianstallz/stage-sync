@@ -45,11 +45,11 @@ func TestPostgresClient_QueryTables(t *testing.T) {
 	}(client)
 
 	// Create a table in the database
-	_, err = client.Connection().Exec("CREATE TABLE test (id INT PRIMARY KEY, name VARCHAR(50))")
+	_, err = client.Connection().Exec("CREATE TABLE test (id INT PRIMARY KEY, name VARCHAR(50), verbs integer[])")
 	assert.NoError(t, err)
 
 	// Insert some data into the table
-	_, err = client.Connection().Exec("INSERT INTO test (id, name) VALUES (1, 'John'), (2, 'Jane')")
+	_, err = client.Connection().Exec("INSERT INTO test (id, name, verbs) VALUES (1, 'John', ARRAY[1, 2, 3]), (2, 'Jane', ARRAY[1, 2, 3])")
 	assert.NoError(t, err)
 
 	// Call buildTable
@@ -57,7 +57,7 @@ func TestPostgresClient_QueryTables(t *testing.T) {
 		Name:        "test",
 		PrimaryKeys: []string{"id"},
 		NoDelete:    false,
-		Columns:     []string{"id", "name"},
+		Columns:     []string{"id", "name", "verbs"},
 	}
 	result := client.BuildTable(table)
 
@@ -69,4 +69,8 @@ func TestPostgresClient_QueryTables(t *testing.T) {
 	assert.Equal(t, 2, len(result.Rows))
 	assert.Equal(t, []string{"id"}, result.PrimaryKeys)
 	assert.False(t, result.NoDelete)
+
+	t.Log(result.Rows[0][2].Type)
+	intArr := []int{1, 2, 3}
+	assert.Equal(t, intArr, result.Rows[0][2].Value)
 }

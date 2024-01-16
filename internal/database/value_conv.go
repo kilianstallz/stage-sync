@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"github.com/jackc/pgtype"
 	numeric "github.com/jackc/pgtype/ext/shopspring-numeric"
 	"github.com/shopspring/decimal"
 	"go.uber.org/zap"
@@ -56,8 +57,19 @@ func ConvertDbValue(v interface{}) interface{} {
 			return nil
 		}
 		return v
+	case pgtype.Int4Array:
+		return pgIntArrayToSlice(t)
 	default:
 		zap.L().Error("unsupported type", zap.Any("type", v))
 		return v
 	}
+}
+
+func pgIntArrayToSlice(pgArray pgtype.Int4Array) []int {
+	result := make([]int, len(pgArray.Elements))
+	for i, elem := range pgArray.Elements {
+		// Use Int field to access the actual int value
+		result[i] = int(elem.Int)
+	}
+	return result
 }

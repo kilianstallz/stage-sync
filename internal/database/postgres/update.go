@@ -39,6 +39,9 @@ func BuildUpdateQuery(tableName string, changedColumn []string, originalRow mode
 		// } else {
 		//	query = query.Where(goqu.Ex{column.Name: column.Value})
 		// }
+		if !column.IsPK {
+			continue
+		}
 		query = query.Where(goqu.Ex{column.Name: column.Value})
 	}
 	q, _, err := query.ToSQL()

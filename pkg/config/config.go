@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 
@@ -41,5 +42,13 @@ func ParseConfigFromFile(path string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// check for each table if it has a primary key
+	for _, table := range config.Tables {
+		if len(table.PrimaryKeys) == 0 {
+			return nil, errors.New("table " + table.Name + " has no primary keys")
+		}
+	}
+
 	return config, nil
 }
