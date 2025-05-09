@@ -10,7 +10,7 @@ require (
 	github.com/lib/pq v1.10.9
 	github.com/onsi/gomega v1.30.0
 	github.com/samber/lo v1.38.1
-	github.com/shopspring/decimal v1.3.1
+	github.com/shopspring/decimal v1.4.0
 	github.com/spf13/cobra v1.8.0
 	github.com/stretchr/testify v1.8.4
 	github.com/testcontainers/testcontainers-go v0.26.0
