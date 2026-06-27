@@ -52,6 +52,6 @@ jobs:
         with:
           go-version: '>=1.21'
 
-      - uses: imjasonh/setup-ko@v0.6
+      - uses: imjasonh/setup-ko@v0.10
 
       - run: ko build ./cmd/stage-sync -B
